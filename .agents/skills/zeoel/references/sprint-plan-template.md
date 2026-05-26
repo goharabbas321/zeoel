@@ -70,6 +70,50 @@ Save as `docs/sprint-N/plan.md`:
 > 6. Move to the next task on the list.
 ```
 
+## Document Existence Checklist
+
+> Verify ALL mandatory documents at key checkpoints.
+> Print this checklist: at sprint start, every 3 tasks, and before closing the sprint.
+> This is NOT optional — it is a HARD-GATE verification.
+
+### Sprint Start (Phase 2 → Phase 3 transition)
+
+```
+═══════════════════════════════════════════
+  SPRINT START — DOCUMENT VERIFICATION
+═══════════════════════════════════════════
+  [ ] docs/sprint-N/plan.md          — exists
+  [ ] docs/sprint-N/progress.md      — exists (empty template)
+  [ ] docs/sprint-N/deferred.md      — exists (empty template)
+  [ ] docs/deferred/backlog.md       — exists (created or updated)
+  [ ] docs/qa/sprint-N-signoff.md    — exists (empty stub)
+  [ ] docs/security/sprint-N-audit.md — exists (empty stub)
+  [ ] docs/seo/sprint-N-audit.md     — exists (empty stub, or N/A documented)
+═══════════════════════════════════════════
+```
+
+> If ANY item is ❌, create it NOW before starting execution.
+
+### Sprint End (Phase 4 completion)
+
+```
+═══════════════════════════════════════════
+  SPRINT END — COMPLETION VERIFICATION
+═══════════════════════════════════════════
+  [ ] docs/sprint-N/progress.md      — all tasks ✅ or ⏭️
+  [ ] docs/sprint-N/deferred.md      — updated (or "no items deferred")
+  [ ] docs/deferred/backlog.md       — updated
+  [ ] docs/qa/sprint-N-signoff.md    — finalized, says PASS
+  [ ] docs/security/sprint-N-audit.md — finalized, all criticals resolved
+  [ ] docs/seo/sprint-N-audit.md     — finalized (or N/A documented)
+  [ ] docs/tests/sprint-N-coverage.md — exists with test summary
+  [ ] docs/sprint-N/done.md          — written LAST
+  [ ] PROJECT_BRIEF.md               — sprint status updated
+═══════════════════════════════════════════
+```
+
+> If ANY item is ❌, complete it FIRST. The sprint is NOT done until all items are ✅.
+
 ## Progress Tracker
 
 Create `docs/sprint-N/progress.md` at sprint start:

@@ -1,6 +1,6 @@
 {
   "name": "zeoel-framework",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A production-grade multi-agent orchestration framework for building enterprise SaaS products.",
   "main": "index.js",
   "bin": {
@@ -9,13 +9,35 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goharabbas321/zeoel-framework.git"
+  },
+  "homepage": "https://github.com/goharabbas321/zeoel-framework#readme",
+  "bugs": {
+    "url": "https://github.com/goharabbas321/zeoel-framework/issues"
+  },
   "keywords": [
     "ai",
     "agent",
     "framework",
     "zeoel",
-    "orchestration"
+    "orchestration",
+    "multi-agent",
+    "llm",
+    "saas"
   ],
-  "author": "Gohar Abbas",
-  "license": "MIT"
+  "author": "Gohar Abbas (goharabbas321)",
+  "license": "MIT",
+  "files": [
+    "bin/",
+    ".agents/",
+    ".github/",
+    ".gitignore.template",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "README.md",
+    "SETUP.md",
+    "USER_MANUAL.md"
+  ]
 }

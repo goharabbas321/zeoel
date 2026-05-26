@@ -13,6 +13,10 @@
 
 ```
 your-project/
+├── frontend/                  # Your frontend codebase (Next.js, React)
+├── backend/                   # Your backend codebase (Laravel, Django)
+├── docs/                      # Sprint orchestration artifacts
+├── .worktrees/                # Sprint snapshots (created automatically)
 ├── .agents/
 │   └── skills/
 │       └── zeoel/             # ← The entire Zeoel framework
@@ -21,7 +25,8 @@ your-project/
 │           ├── skills/
 │           ├── references/
 │           └── examples/
-├── src/                       # Your project source code
+├── PROJECT_BRIEF.md           # Master requirements document
+├── .gitignore                 # Auto-generated
 ├── package.json               # (or composer.json, pubspec.yaml, etc.)
 └── README.md
 ```
@@ -152,6 +157,8 @@ When executing specialized tasks, load the relevant agent's persona file from `.
 
 - NEVER write code without an approved PROJECT_BRIEF.md.
 - ALWAYS follow the 4-phase pipeline.
+- Code MUST live in `frontend/` or `backend/`. Do NOT create other code directories.
+- Sprint snapshots are saved in `.worktrees/`.
 - Use sprint documents (`docs/sprint-N/`) for context survival.
 - One commit per task.
 

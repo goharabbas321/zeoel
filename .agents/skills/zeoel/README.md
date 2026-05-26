@@ -4,20 +4,20 @@
 
 ## What is Zeoel?
 
-Zeoel is an AI-powered software development agency that replaces monolithic prompts with a **13-agent pipeline**. Each agent has a distinct persona, curated skill pack, and specific responsibility. When you say "I want to build a SaaS product", Zeoel doesn't just start coding — it **brainstorms**, **plans sprints**, **delegates to specialists**, and **verifies quality** before shipping.
+Zeoel is an AI-powered software development agency that replaces monolithic prompts with a **22-agent pipeline**. Each agent has a distinct persona, curated skill pack, and specific responsibility. When you say "I want to build a SaaS product", Zeoel doesn't just start coding — it **brainstorms**, **plans sprints**, **delegates to specialists**, and **verifies quality** before shipping.
 
 ### The 4-Phase Pipeline
 
 ```
-Phase 1: BRAINSTORM → Phase 2: PLAN → Phase 3: EXECUTE → Phase 4: VERIFY
+Phase 1: BRAINSTORM → Phase 2: PLAN → Phase 3: EXECUTE → Phase 4: VERIFY & SNAPSHOT
 ```
 
-1. **Brainstorm** — Gohar (CEO) leads a debate between all 13 agents to define scope, SEO strategy, and architecture.
+1. **Brainstorm** — Gohar (CEO) leads a debate between all agents to define scope, SEO strategy, and architecture.
 2. **Sprint Planning** — Decompose the brief into sprints and assign tasks to specialized agents.
-3. **Execution** — Each agent is dispatched with its curated skills to complete its task.
-4. **Verification** — QA tests, security audit, SEO audit, and performance review before shipping.
+3. **Execution** — Each agent is dispatched with its curated skills to complete its task in the `frontend/` or `backend/` directories.
+4. **Verification & Snapshot** — QA tests, security audit, SEO audit, and a full backup of the sprint to `.worktrees/sprint-N/`.
 
-## The 13 Agents
+## The 22 Agents
 
 | Agent | Name | Specialty |
 |-------|------|-----------|
@@ -66,11 +66,11 @@ See **[SETUP.md](SETUP.md)** for step-by-step installation on GitHub Copilot, Co
 ## Project Structure
 
 ```
-.agents/skills/zeoel/                     # 1.9MB — fully self-contained
+.agents/skills/zeoel/                     # The framework
 ├── SKILL.md                              # Main orchestrator (entry point)
 ├── README.md                             # This file
 ├── SETUP.md                              # Platform setup guide
-├── agents/                               # 13 specialized sub-agents
+├── agents/                               # 22 specialized sub-agents
 │   ├── gohar-ceo.md                      # CEO & Coordinator
 │   ├── mahdi-designer.md                 # Product Designer (SEO-first)
 │   ├── mustafa-visual.md                 # Visual Director (3D, GSAP)
@@ -116,4 +116,4 @@ See `agents/_template.md` for the agent creation template and `references/agent-
 
 ## License
 
-Proprietary — Zeoel AI Agency © Gohar Abbas
+MIT License — Zeoel AI Agency © Gohar Abbas

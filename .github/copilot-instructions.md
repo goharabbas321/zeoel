@@ -5,10 +5,11 @@ This project uses the **Zeoel AI Agency** — a multi-agent framework for robust
 ## Mandatory Rules (NO EXCEPTIONS)
 
 1. **NEVER** write code without an approved `PROJECT_BRIEF.md`.
-2. **ALWAYS** follow the pipeline: Brainstorm → Plan → Isolate (Worktree) → Execute (Strict TDD) → Verify.
+2. **ALWAYS** follow the pipeline: Brainstorm → Plan → Execute (Strict TDD) → Verify & Snapshot.
 3. **ALWAYS** read the relevant agent's `.md` file AND load their ⭐ skills before specialized work.
 4. **ALWAYS** create ALL mandatory documents at each phase boundary.
-5. When the user says "build X" → Start with Phase 1 (Brainstorm). Do NOT jump to code.
+5. Code **MUST** live in `frontend/` or `backend/`. No other code directories.
+6. When the user says "build X" → Start with Phase 1 (Brainstorm). Do NOT jump to code.
 
 ## Framework Entry Point
 
@@ -20,9 +21,8 @@ Read `.agents/skills/zeoel/SKILL.md` at the start of every task.
 |-------|----------------|-------------|
 | 1. Brainstorm | `.agents/skills/zeoel/skills/zeoel-brainstorm/SKILL.md` | `PROJECT_BRIEF.md`, `docs/brainstorm/summary.md` |
 | 2. Sprint Plan | `.agents/skills/zeoel/skills/zeoel-sprint-planner/SKILL.md` | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md` |
-| 2.5 Isolate | `.agents/skills/zeoel/skills/using-git-worktrees/SKILL.md` | Git Worktree Branch |
 | 3. Execute | `.agents/skills/zeoel/skills/zeoel-dispatch/SKILL.md` | Working code via Red-Green-Refactor TDD |
-| 4. Verify | Dispatch QA + Security + SEO | Sign-off docs, `done.md` |
+| 4. Verify & Snapshot| Dispatch QA + Security + SEO | Sign-off docs, `done.md`, and `.worktrees/sprint-N/` snapshot |
 
 ## Sub-Agent Dispatch Protocol
 

@@ -60,9 +60,18 @@ Zeoel forbids "shotgun debugging" (randomly changing code to fix an error). Sajj
 3. Trace the root cause.
 4. Apply a minimal fix.
 
+**Common Issues:**
+- **Context Loss**: If the AI forgets what it was doing, tell it: *"Run the Context Recovery Protocol from SKILL.md"*.
+- **Code outside directories**: If an agent tries to create files at the root, remind it: *"Follow the Codebase Containment Rules.
+
 ## Managing the Backlog
 
 If a task is too complex or out of scope for the current sprint, Gohar will defer it.
 - Deferred items are logged in `docs/sprint-N/deferred.md`.
 - They roll up into the master `docs/deferred/backlog.md`.
 - You can review these at the start of your next sprint.
+
+## Contact & Support
+- **Author**: Gohar Abbas (@goharabbas321)
+- **Telegram**: [@goharabbas786](https://t.me/goharabbas786)
+- **GitHub**: [zeoel-framework](https://github.com/goharabbas321/zeoel-framework)

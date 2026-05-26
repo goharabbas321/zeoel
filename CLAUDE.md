@@ -8,7 +8,8 @@ MANDATORY RULES — ZERO EXCEPTIONS:
 2. ALWAYS follow the pipeline: Brainstorm → Plan → Isolate (Worktree) → Execute (Strict TDD) → Verify.
 3. ALWAYS read the relevant agent's `.md` file AND load their ⭐ skill bindings before specialized work.
 4. ALWAYS create ALL mandatory documents at each phase boundary.
-5. When the user says "build X" or "create X" → Start with Phase 1 (Brainstorm). Do NOT jump to code.
+5. Code MUST live in `frontend/` or `backend/`. No other code directories.
+6. When the user says "build X" or "create X" → Start with Phase 1 (Brainstorm). Do NOT jump to code.
 </HARD-GATE>
 
 ## Framework Location
@@ -21,9 +22,8 @@ The complete Zeoel framework is at `.agents/skills/zeoel/SKILL.md`. **Read it no
 |-------|-------------|----------------------|
 | **1. Brainstorm** | `.agents/skills/zeoel/skills/zeoel-brainstorm/SKILL.md` | `PROJECT_BRIEF.md` (user approved), `docs/brainstorm/summary.md` |
 | **2. Sprint Plan** | `.agents/skills/zeoel/skills/zeoel-sprint-planner/SKILL.md` | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md` |
-| **2.5 Isolate** | `.agents/skills/zeoel/skills/using-git-worktrees/SKILL.md` | Isolated Git Worktree |
 | **3. Execute** | `.agents/skills/zeoel/skills/zeoel-dispatch/SKILL.md` | Working code (Red-Green-Refactor TDD), `progress.md` updated |
-| **4. Verify** | Dispatch QA + Security + SEO agents | `docs/qa/sprint-N-signoff.md`, `docs/security/sprint-N-audit.md`, `docs/sprint-N/done.md` |
+| **4. Verify & Snapshot** | Dispatch QA + Security + SEO agents | `docs/qa/`, `docs/security/`, `docs/sprint-N/done.md`, and `.worktrees/sprint-N/` snapshot |
 
 **Phase Gates**: You CANNOT enter Phase N+1 without Phase N deliverables existing as files.
 
@@ -31,7 +31,7 @@ The complete Zeoel framework is at `.agents/skills/zeoel/SKILL.md`. **Read it no
 
 | Agent | File | Dispatch For | Primary Skills (⭐) |
 |-------|------|-------------|---------------------|
-| **Gohar** (CEO) | `gohar-ceo.md` | Sprint planning, worktrees | `zeoel`, `using-git-worktrees` |
+| **Gohar** (CEO) | `gohar-ceo.md` | Sprint planning, snapshots | `zeoel` |
 | **Mahdi** (Designer) | `mahdi-designer.md` | UX flows, accessibility | `frontend-design`, `seo` |
 | **Mustafa** (Visual) | `mustafa-visual.md` | 3D, GSAP, design tokens | `frontend-design`, `ui-ux-pro-max` |
 | **Karar** (Frontend) | `karar-frontend.md` | Next.js, shadcn, TDD | `nextjs-turbopack`, `test-driven-development` |
@@ -43,7 +43,7 @@ The complete Zeoel framework is at `.agents/skills/zeoel/SKILL.md`. **Read it no
 | **Sajjad** (Debugger) | `sajjad-debugger.md` | Root cause analysis | `systematic-debugging`, `error-handling` |
 | **Baqir** (Docs) | `baqir-docs.md` | Technical writing, OpenAPI | `zeoel-codebase-knowledge`, `api-design` |
 | **Muhammad** (QA) | `muhammad-qa.md` | E2E testing, quality gates | `e2e-testing`, `test-driven-development` |
-| **Ali** (DevOps) | `ali-devops.md` | CI/CD, Docker, Security | `deployment-patterns`, `using-git-worktrees` |
+| **Ali** (DevOps) | `ali-devops.md` | CI/CD, Docker, Security | `deployment-patterns` |
 | **Ibrahim** (AI Architect)| `ibrahim-ai.md` | MCP, Multi-agent | `mcp-patterns` |
 | **Yusuf** (Java) | `yusuf-java.md` | Spring Boot, Quarkus | `java-patterns` |
 | **Bilal** (Systems) | `bilal-systems.md` | Go, Rust, C++ | `go-patterns` |

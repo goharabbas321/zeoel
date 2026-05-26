@@ -106,6 +106,31 @@ Create ALL of these files:
 - `docs/security/sprint-N-audit.md` — empty with header
 - `docs/seo/sprint-N-audit.md` — empty with header (if sprint has public pages)
 
+### Step 6.5: Verify ALL Mandatory Documents Were Created (BLOCKING)
+
+<HARD-GATE>
+STOP. Before presenting the plan to the user, verify that ALL of these files have been created. Check EACH file — do NOT assume they exist.
+
+Print this verification:
+
+```
+═══════════════════════════════════════════
+  SPRINT N PLANNING — DOCUMENT VERIFICATION
+═══════════════════════════════════════════
+  [ ] docs/sprint-N/plan.md          — Created
+  [ ] docs/sprint-N/progress.md      — Created (empty template)
+  [ ] docs/sprint-N/deferred.md      — Created (empty template)
+  [ ] docs/deferred/backlog.md       — Created or Updated
+  [ ] docs/qa/sprint-N-signoff.md    — Created (empty stub)
+  [ ] docs/security/sprint-N-audit.md — Created (empty stub)
+  [ ] docs/seo/sprint-N-audit.md     — Created (empty stub, if public pages)
+═══════════════════════════════════════════
+```
+
+If ANY item is ❌, go back and create it NOW.
+Do NOT present the plan to the user until ALL items are ✅.
+</HARD-GATE>
+
 ### Step 7: User Review
 Present the sprint plan to the user. They MUST approve before execution begins.
 

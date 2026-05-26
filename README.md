@@ -1,12 +1,21 @@
 # Zeoel — AI Agency Multi-Agent Framework
 
-> A production-grade multi-agent orchestration framework for building enterprise-grade products. Powered by **22 highly specialized AI agents**, isolated Git Worktrees, strict Red-Green-Refactor TDD, and rigorous multi-stage verification.
+[![NPM Version](https://img.shields.io/npm/v/zeoel-framework.svg)](https://www.npmjs.com/package/zeoel-framework)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> A production-grade multi-agent orchestration framework for building enterprise-grade products. Powered by **22 highly specialized AI agents**, strict `frontend/` and `backend/` codebase containment, rigorous multi-stage verification, and `.worktrees/` sprint snapshots.
+
+## Links & Contact
+- **NPM Package**: [zeoel-framework](https://www.npmjs.com/package/zeoel-framework)
+- **GitHub Repository**: [goharabbas321/zeoel-framework](https://github.com/goharabbas321/zeoel-framework)
+- **Creator**: Gohar Abbas (@goharabbas321)
+- **Telegram**: [@goharabbas786](https://t.me/goharabbas786)
 
 ## What is Zeoel?
 
 Zeoel is an AI-powered software development agency that replaces monolithic prompts with a **22-agent pipeline**. Each agent has a distinct persona, curated skill pack, and specific responsibility. When you say "I want to build a SaaS product", Zeoel doesn't just start coding — it **brainstorms**, **plans sprints**, **delegates to specialists**, and **verifies quality** before shipping.
 
-With integrated **Superpowers methodologies**, Zeoel protects your codebase by running all tasks in isolated Git worktrees and enforces strict verification loops.
+With integrated **Superpowers methodologies**, Zeoel protects your codebase by running all tasks directly on your main feature branches in designated `frontend/` and `backend/` directories, backing up every sprint into a permanent `.worktrees/` snapshot, and enforcing strict verification loops.
 
 ## The 4-Phase Pipeline
 
@@ -15,9 +24,9 @@ Phase 1: BRAINSTORM → Phase 2: PLAN → Phase 3: EXECUTE → Phase 4: VERIFY
 ```
 
 1. **Brainstorm** — Gohar (CEO) leads a debate between all agents to define scope, architecture, and constraints.
-2. **Sprint Planning & Isolation** — Decomposes the brief into sprints. Gohar creates an isolated **Git Worktree** (`sprint-N`) so the main branch is never touched directly.
-3. **Execution** — Each agent is dispatched with its curated skills to complete its task using **Strict Red-Green-Refactor TDD**.
-4. **Verification** — QA tests, security audits, SEO audits, and a final code review before deciding to merge the worktree into `main` or open a PR.
+2. **Sprint Planning** — Decomposes the brief into sprints. Gohar creates a branch (`feature/sprint-N`) in the root codebase so the main branch is not touched directly.
+3. **Execution** — Each agent is dispatched with its curated skills to complete its task using **Strict Red-Green-Refactor TDD** inside `frontend/` and `backend/`.
+4. **Verification & Snapshot** — QA tests, security audits, SEO audits, and a final code review. Once passed, the branch is merged to main, and the sprint is archived into a `.worktrees/sprint-N/` snapshot for permanent tracking.
 
 ## The 22 Specialized Agents
 
@@ -25,7 +34,7 @@ Zeoel boasts a massive roster of specialized engineers, designers, and domain ex
 
 | Role | Name | Specialty & Tech Stack |
 |------|------|------------------------|
-| 👑 CEO | **Gohar** | Orchestration, Sprint Planning, Git Worktrees |
+| 👑 CEO | **Gohar** | Orchestration, Sprint Planning, Worktree Snapshots |
 | 🎨 Product Designer | **Mahdi** | UX Flows, Accessibility, SEO-First Design |
 | 🖌️ Visual Director | **Mustafa** | Three.js, GSAP, Premium Styling, Framer Motion |
 | ⚛️ Sr. Frontend Eng | **Karar** | Next.js App Router, shadcn/ui, 3D, GSAP, SEO |
@@ -68,12 +77,15 @@ See **[USER_MANUAL.md](USER_MANUAL.md)** for a comprehensive guide on how to int
 1. **Start the conversation**: *"I want to build a [your idea]"*
 2. **Follow the flow**: Zeoel will automatically run Phase 1 (Brainstorm) and ask clarifying questions.
 3. **Approve the Plan**: After generating `docs/sprint-N/plan.md`, Zeoel will wait for your approval.
-4. **Watch it Work**: Zeoel will spin up an isolated Git Worktree, write tests, execute the code, and run audits autonomously.
-5. **Ship**: Review the final results and merge the worktree branch!
+4. **Watch it Work**: Zeoel will write tests, execute the code directly in `frontend/` and `backend/`, and run audits autonomously.
+5. **Ship**: Review the final results in the `.worktrees/sprint-N/` snapshot and merge to main!
 
-## Architecture
+## Architecture & Codebase Containment
 
-Zeoel heavily relies on the file system for shared memory:
+Zeoel heavily relies on the file system for shared memory and strict directory containment:
+- `frontend/` — All frontend code.
+- `backend/` — All backend code.
+- `.worktrees/` — Runnable Git Worktree snapshots of completed sprints.
 - `PROJECT_BRIEF.md`: The master requirements document.
 - `docs/sprint-N/plan.md`: The current sprint plan.
 - `docs/sprint-N/progress.md`: Real-time task tracker updated after every task.

@@ -1,0 +1,8 @@
+# Zeoel Framework Ignore Rules
+.agents/
+docs/sprint-*/
+docs/qa/
+docs/security/
+docs/seo/
+docs/tests/
+.worktrees/

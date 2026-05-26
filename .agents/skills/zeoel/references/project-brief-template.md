@@ -29,18 +29,18 @@ Copy this template to your project root and fill in every section. **Do not abbr
 ```
 
 ┌─────────────────────────────────────────┐
-│              Frontend                   │
-│  [Main Component] → [Sub Components]    │
+│ Frontend │
+│ [Main Component] → [Sub Components] │
 └──────────────┬──────────────────────────┘
-               │ HTTPS
+│ HTTPS
 ┌──────────────▼──────────────────────────┐
-│              Backend API                │
-│  [Endpoints and their purpose]          │
+│ Backend API │
+│ [Endpoints and their purpose] │
 └──────────────┬──────────────────────────┘
-               │
+│
 ┌──────────────▼──────────────────────────┐
-│              Storage / Database         │
-│  [Tables, collections, env vars]        │
+│ Storage / Database │
+│ [Tables, collections, env vars] │
 └─────────────────────────────────────────┘
 
 ````
