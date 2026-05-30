@@ -52,6 +52,7 @@ All agent definitions are in `.agents/skills/zeoel/agents/`:
 | **Salman** (Web3) | `salman-web3.md` | Smart Contracts, DeFi | `solidity-patterns` |
 | **Maryam** (Business) | `maryam-ops.md` | SaaS Ops, Metrics | `saas-ops` |
 | **Zayd** (React Native) | `zayd-react-native.md` | React Native, Expo | `react-native-best-practices` |
+| **Zainab** (Product Manager) | `zainab-pm.md` | Agile sprints, backlogs | `project-flow-ops`, `product-lens` |
 
 ## Sub-Agent Dispatch Protocol
 

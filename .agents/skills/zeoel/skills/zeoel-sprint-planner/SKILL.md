@@ -44,6 +44,7 @@ Within each sprint, define tasks. Rules:
 - **TDD focus**: Sequence tests BEFORE implementation in the task list.
 - **Clear boundaries**: Ensure two agents aren't modifying the same file.
 - **Required Tests column is MANDATORY**: Every code-producing task must specify what tests are expected (e.g., "Component test + accessibility test", "Feature test + auth bypass test"). Design/coordination tasks can use "—".
+- **Model Tier column is MANDATORY**: Gohar MUST assign a complexity tier (🟢 Light / 🟡 Standard / 🔴 Complex) to each task for intelligent model routing. See `.agents/skills/zeoel/skills/zeoel-dispatch/SKILL.md` Step 3.5 for the tier definitions.
 
 ### Step 4: Agent Assignment with Skill Bindings
 For EVERY task, explicitly assign an agent AND list the skills they will use:
@@ -58,13 +59,13 @@ For EVERY task, explicitly assign an agent AND list the skills they will use:
 | Flutter mobile app | **Abdullah** (Mobile) | `dart-flutter-patterns`, `flutter-dart-code-review`, `mobile-app-design` |
 | React Native mobile app | **Zayd** (React Native) | `react-native-best-practices`, `react-native-brownfield-migration`, `upgrading-react-native` |
 | Data analytics, ML, DB optimization | **Fatima** (Data) | `postgres-patterns`, `python-patterns`, `mle-workflow` |
-| Python scripts, FastAPI, automation | **Gohar(Py)** (Python) | `python-patterns`, `python-testing`, `mle-workflow` |
+| Python scripts, FastAPI, automation | **Abbas** (Python) | `python-patterns`, `python-testing`, `mle-workflow` |
 | Debugging, performance profiling | **Sajjad** (Debugger) | `agent-introspection-debugging`, `error-handling`, `benchmark` |
 | Documentation, API specs | **Baqir** (Docs) | `zeoel-codebase-knowledge`, `codebase-onboarding`, `api-design` |
 | Testing, QA, E2E | **Muhammad** (QA) | `e2e-testing`, `webapp-testing` |
 | Docker, CI/CD, security, deployment | **Ali** (DevOps) | `deployment-patterns`, `docker-patterns`, `security-review`, `zeoel-security` |
 
-**The plan.md MUST include the "Skills to Load" column in the task table.**
+**The plan.md MUST include the "Skills to Load" column AND the "Model Tier" column in the task table.**
 
 ### Step 5: Team Consilium (Mandatory)
 Before finalizing the plan, run a team consilium where each relevant agent reviews from their perspective:
@@ -82,7 +83,7 @@ Create ALL of these files:
 
 **`docs/sprint-N/plan.md`** — Using the template from `references/sprint-plan-template.md`:
 - Sprint goal and branch name
-- Prioritized task list with Agent + Skills + **Required Tests** columns
+- Prioritized task list with Agent + Skills + **Required Tests** + **Model Tier** columns
 - Work schedule with phases
 - Success criteria (testable checkboxes)
 - What's NOT in this sprint
@@ -145,7 +146,7 @@ At the end of Phase 2, these files MUST exist FOR EACH planned sprint:
 
 | File | Description |
 |------|-------------|
-| `docs/sprint-N/plan.md` | Sprint plan with tasks, agents, skill bindings, and **required tests** |
+| `docs/sprint-N/plan.md` | Sprint plan with tasks, agents, skill bindings, **required tests**, and **model tiers** |
 | `docs/sprint-N/progress.md` | Progress tracker with audit checkpoints (created empty, updated during Phase 3) |
 | `docs/sprint-N/deferred.md` | Deferred items tracker (created empty, updated when scope is cut) |
 | `docs/deferred/backlog.md` | Cumulative deferred backlog (created once, updated every sprint) |
@@ -162,6 +163,7 @@ At the end of Phase 2, these files MUST exist FOR EACH planned sprint:
 - **Clear boundaries**: Ensure Karar and Tariq aren't trying to modify the same file in parallel.
 - **Skills column is mandatory**: Every task MUST list which skills the assigned agent will use.
 - **Required Tests column is mandatory**: Every code-producing task MUST specify what tests are expected.
+- **Model Tier column is mandatory**: Every task MUST have a complexity tier for intelligent model routing.
 - **Sprint 0 for SaaS**: Always start with a foundation sprint for SaaS projects.
 - **Deferred.md is mandatory**: Even if nothing is deferred, create the file with "No items deferred."
 - **Audit doc stubs are mandatory**: Pre-create empty audit docs so incremental audits can append to them during Phase 3.

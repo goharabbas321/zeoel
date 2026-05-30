@@ -43,6 +43,7 @@ Phase 1: BRAINSTORM → Phase 2: PLAN → Phase 3: EXECUTE → Phase 4: VERIFY &
 | ⛓️ Web3 Engineer | **Salman** | Smart contracts, DeFi, AMM security, Solidity |
 | 💼 Business Operations | **Maryam** | SaaS billing ops, logistics, startup metrics |
 | 🌐 React Native Specialist | **Zayd** | React Native, Expo, Native Integration |
+| 📋 Product Manager | **Zainab** | Agile sprint management, user story mapping, backlog grooming |
 
 > All agent names are from **Ahle Bait (a.s.)** and the Zeoel team.
 
@@ -103,6 +104,7 @@ See **[SETUP.md](SETUP.md)** for step-by-step installation on GitHub Copilot, Co
 │   ├── khadija-healthcare.md             # Healthcare (HIPAA)
 │   ├── salman-web3.md                    # Web3 (Solidity)
 │   ├── maryam-ops.md                     # Business Operations
+│   ├── zainab-pm.md                      # Product Manager & Scrum Master
 │   └── _template.md                      # Template for adding new agents
 ├── skills/                               # 116 skills (6 orchestration + 110 library)
 │   ├── zeoel-brainstorm/                 # Phase 1: Ideation & Debate

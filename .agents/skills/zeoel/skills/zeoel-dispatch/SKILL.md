@@ -79,6 +79,41 @@ For each ⭐ (starred) skill in the agent's Skill Bindings:
 
 Load only the ⭐ skills by default. Load additional skills only if the specific task requires them.
 
+### Step 3.5: Intelligent Model Routing (Cost-Aware)
+
+Before dispatching, Gohar MUST recommend the **optimal LLM** for this task. The goal is to **minimize token spend while maximizing output quality** — cheap models for simple tasks, powerful models for complex ones.
+
+#### Model Tier Classification
+
+Classify the task into one of three tiers:
+
+| Tier | Task Complexity | Recommended Models | Token Strategy |
+|------|----------------|-------------------|----------------|
+| **🟢 Tier 1: Light** | Docs, config files, simple tests, boilerplate, renaming, formatting | `claude-3.5-haiku`, `gpt-4o-mini`, `gemini-2.0-flash` | Minimize tokens. Fast, cheap. |
+| **🟡 Tier 2: Standard** | Components, API endpoints, CRUD, standard UI, unit tests, migrations | `claude-sonnet-4`, `gpt-4o`, `gemini-2.5-pro` | Balance quality and cost. |
+| **🔴 Tier 3: Complex** | Architecture, security, multi-file refactors, E2E tests, debugging, 3D/WebGL, ML pipelines | `claude-opus-4`, `o3`, `gemini-2.5-pro` (thinking) | Maximize quality. Worth the tokens. |
+
+#### Task → Tier Mapping
+
+| Agent | Typical Tier | Escalate to Tier 3 When... |
+|-------|-------------|---------------------------|
+| **Baqir** (Docs) | 🟢 Light | Complex API spec with examples |
+| **Zara** (SEO) | 🟢 Light | Full SEO audit with competitor analysis |
+| **Ali** (DevOps) | 🟡 Standard | Security audit, OWASP scan |
+| **Karar** (Frontend) | 🟡 Standard | 3D scenes, complex animations, multi-page layouts |
+| **Tariq** (Backend) | 🟡 Standard | Multi-tenant billing, auth flows, data migrations |
+| **Abbas** (Python) | 🟡 Standard | ML pipeline, async architecture |
+| **Muhammad** (QA) | 🟡 Standard | E2E test suites across auth + billing flows |
+| **Mustafa** (Visual) | 🔴 Complex | Always — 3D, GSAP, design token systems |
+| **Sajjad** (Debugger) | 🔴 Complex | Always — root cause analysis requires deep reasoning |
+| **Ibrahim** (AI) | 🔴 Complex | Always — multi-agent architecture |
+
+#### Output Format
+
+Include the model recommendation in the dispatch banner (Step 4).
+
+> **Note for single-model environments**: If you are running in Claude Code, Cursor, or another tool where you cannot switch models mid-session, log the recommendation in `progress.md` as a hint for future sessions or parallel dispatch.
+
 ### Step 4: Announce the Dispatch
 
 Before writing any code, announce:
@@ -89,6 +124,8 @@ Before writing any code, announce:
   Task: [Task # — Task description]
   Skills Loaded: [list of ⭐ skills]
   Required Tests: [what tests this task must produce]
+  Model Tier: [🟢 Light / 🟡 Standard / 🔴 Complex]
+  Recommended Model: [model name]
 ═══════════════════════════════════════════
 ```
 

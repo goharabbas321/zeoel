@@ -13,17 +13,18 @@ Save as `docs/sprint-N/plan.md`:
 
 ## Prioritized Task List
 
-| # | Task   | Assigned Agent                | Skills to Load (⭐) | Required Tests | Est | Description              |
-|---|--------|-------------------------------|----------------------|----------------|-----|--------------------------| 
-| 1 | [task] | Gohar (CEO)                   | `zeoel` | — | 1h  | [what to coordinate]     |
-| 2 | [task] | Mahdi (Product Designer)      | `frontend-design`, `seo` | — | 2h  | [what to design]         |
-| 3 | [task] | Mustafa (Art/Visual Director) | `ui-ux-pro-max`, `gsap-scrolltrigger` | — | 1h  | [what to style]          |
-| 4 | [task] | Karar (Frontend Engineer)     | `nextjs-turbopack`, `frontend-design` | Component test, route integration test | 1h  | [what to build on UI]    |
-| 5 | [task] | Tariq (Backend Engineer)      | `laravel-patterns`, `api-design` | Feature test, security assertions | 2h  | [what to build on API]   |
-| 6 | [task] | Muhammad (QA Engineer)        | `e2e-testing` | E2E spec file | 1h  | [what to test]           |
-| 7 | [task] | Ali (DevOps Engineer)         | `deployment-patterns` | Pipeline validation, security tests | 1h  | [what to deploy]         |
+| # | Task   | Assigned Agent                | Skills to Load (⭐) | Required Tests | Model Tier | Est | Description              |
+|---|--------|-------------------------------|----------------------|----------------|------------|-----|--------------------------| 
+| 1 | [task] | Gohar (CEO)                   | `zeoel` | — | — | 1h  | [what to coordinate]     |
+| 2 | [task] | Mahdi (Product Designer)      | `frontend-design`, `seo` | — | 🟢 Light | 2h  | [what to design]         |
+| 3 | [task] | Mustafa (Art/Visual Director) | `ui-ux-pro-max`, `gsap-scrolltrigger` | — | 🔴 Complex | 1h  | [what to style]          |
+| 4 | [task] | Karar (Frontend Engineer)     | `nextjs-turbopack`, `frontend-design` | Component test, route integration test | 🟡 Standard | 1h  | [what to build on UI]    |
+| 5 | [task] | Tariq (Backend Engineer)      | `laravel-patterns`, `api-design` | Feature test, security assertions | 🟡 Standard | 2h  | [what to build on API]   |
+| 6 | [task] | Muhammad (QA Engineer)        | `e2e-testing` | E2E spec file | 🟡 Standard | 1h  | [what to test]           |
+| 7 | [task] | Ali (DevOps Engineer)         | `deployment-patterns` | Pipeline validation, security tests | 🟡 Standard | 1h  | [what to deploy]         |
 
 > **Required Tests column is MANDATORY.** Every code-producing task must specify what tests are expected. Design/coordination tasks can use "—".
+> **Model Tier column is MANDATORY.** Gohar assigns 🟢 Light / 🟡 Standard / 🔴 Complex to optimize token spend per task.
 
 ## Work Schedule
 

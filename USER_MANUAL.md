@@ -19,18 +19,15 @@ This copies the `.agents/skills/zeoel` directory into your workspace, instantly 
 Simply open a chat with your AI assistant and say:
 > "I want to build a [describe your app/SaaS/feature]"
 
-### Step 0: Project Configuration (NEW)
-Before brainstorming begins, **Gohar (CEO) will ask you key configuration questions** to tailor the entire development process to your needs:
+### Step 0: Smart Config Inference & Questionnaire (NEW)
 
-1. **Stack scope** — Frontend only (with mock data), full-stack, or backend only?
-2. **Frontend framework** — Next.js, Vite + React, Nuxt, or other?
-3. **Backend framework** — Laravel, Django, FastAPI, NestJS, Spring Boot, or none?
-4. **Database** — PostgreSQL, MySQL, MongoDB, SQLite, or none?
-5. **Mobile** — Do you need a companion app? (Flutter / React Native / None)
-6. **Worktree snapshots** — Should Zeoel archive each sprint to `.worktrees/sprint-N/`? (Yes/No)
-7. **Testing strictness** — Strict TDD (Red-Green-Refactor, mandatory) or Relaxed (tests after code)?
+Before brainstorming begins, **Gohar (CEO) will intelligently analyze your initial prompt** to auto-detect your stack, testing, and snapshot preferences:
 
-Your answers are saved in `PROJECT_BRIEF.md` and control which agents get dispatched.
+- **Smart Inference**: If Gohar finds the answers inside your prompt (e.g., you mention "Next.js", "Laravel", or "PostgreSQL"), he auto-configures them!
+- **Targeted Questionnaire**: Gohar will only ask you the remaining questions that he could not confidently infer from your prompt, or ask for confirmation of the inferred configuration.
+- **Full Control**: You can explicitly override any auto-detected configuration at any time by simply telling Gohar your preference.
+
+Your final configuration is saved in `PROJECT_BRIEF.md` Section 0 and determines which agents are dispatched.
 
 ### Phase 1: Brainstorming
 Zeoel will NOT write code immediately.
@@ -38,9 +35,13 @@ Zeoel will NOT write code immediately.
 - They will ask you clarifying questions about your goals, stack, and constraints.
 - Once you align, Gohar will write the `PROJECT_BRIEF.md`.
 
-### Phase 2: Sprint Planning
+### Phase 2: Sprint Planning — with Intelligent Model Routing
 - Gohar will decompose the `PROJECT_BRIEF.md` into actionable Sprints.
-- He will write `docs/sprint-1/plan.md` and present it to you for approval.
+- **Auto LLM Switching**: For every task, Gohar recommends the optimal **Model Tier** based on complexity, token cost, and agent specialization:
+  - 🟢 **Light** (e.g., `claude-3.5-haiku`, `gpt-4o-mini`, `gemini-flash`): Best for docs, boilerplate, config, and simple unit tests. Saves up to 90% in token cost.
+  - 🟡 **Standard** (e.g., `claude-sonnet-4`, `gpt-4o`, `gemini-pro`): Best for component logic, REST/GraphQL APIs, CRUD operations, and styling.
+  - 🔴 **Complex** (e.g., `claude-opus-4`, `o3`, `gemini-pro-thinking`): Reserved for complex architecture, advanced debugging, security audits, ML pipelines, and 3D WebGL scenes.
+- He will write `docs/sprint-1/plan.md` (which lists the recommended LLM tier for each task) and present it to you for approval.
 - **Your Action**: Review the plan. If you agree, say "Approved, execute Sprint 1."
 
 ## 3. Execution & Codebase Structure

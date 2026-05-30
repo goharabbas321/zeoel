@@ -45,6 +45,8 @@ Most AI coding tools use a single monolithic prompt. You tell them to "build a S
 |---|:---:|:---:|
 | Structured 4-phase pipeline | ❌ | ✅ |
 | 23 specialized agents (frontend, backend, QA, DevOps...) | ❌ | ✅ |
+| 🧠 Smart Config Inference (reads your prompt, skips questions) | ❌ | ✅ |
+| 💡 Intelligent Model Routing (auto-selects cheapest LLM per task) | ❌ | ✅ |
 | Strict TDD enforcement (Red-Green-Refactor) | ❌ | ✅ |
 | Sprint planning with progress tracking | ❌ | ✅ |
 | Automatic code containment (`frontend/` + `backend/`) | ❌ | ✅ |
@@ -72,17 +74,69 @@ Zeoel follows a disciplined 4-phase pipeline — no shortcuts, no vibe-coding. W
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### Phase 1: Brainstorm
-**Gohar (CEO)** leads a debate between all agents to define scope, architecture, and constraints. Produces `PROJECT_BRIEF.md`.
+### Phase 1: Brainstorm — with Smart Config Inference
+**Gohar (CEO)** reads your prompt and **auto-detects** your stack preferences (framework, database, testing style) — no 20-question surveys. He asks only what he can't figure out, then leads a debate between all agents to define scope. Produces `PROJECT_BRIEF.md`.
 
-### Phase 2: Sprint Planning
-Decomposes the brief into actionable sprints. Creates a feature branch (`feature/sprint-N`) so `main` is never touched directly.
+### Phase 2: Sprint Planning — with Model Routing
+Decomposes the brief into actionable sprints. Each task gets an assigned agent, skill bindings, AND a **Model Tier** (🟢 Light / 🟡 Standard / 🔴 Complex) so you spend Haiku-level tokens on docs and Opus-level tokens only when it matters.
 
 ### Phase 3: Execution
 Each agent is dispatched with its curated skills to complete its task. **Strict Red-Green-Refactor TDD** — tests are always written first. All code lives in `frontend/` and `backend/` only.
 
 ### Phase 4: Verification & Snapshot
 QA tests, security audits, SEO audits, and a final code review. Once passed, the branch merges to `main` and the sprint is archived to `.worktrees/sprint-N/`.
+
+---
+
+## 🧠 Smart Config Inference
+
+Most frameworks ask you a dozen setup questions before you even start. **Zeoel reads your prompt and figures it out.**
+
+```
+You: "Build me a SaaS dashboard with auth and Stripe billing"
+
+Gohar: 
+═══════════════════════════════════════════
+  🔍 SMART CONFIG — Auto-detected from your prompt
+═══════════════════════════════════════════
+  ✅ Stack:     Full-stack (detected: "auth and billing")
+  ✅ Frontend:  Next.js (detected: "SaaS dashboard")
+  ✅ Backend:   Laravel (detected: "billing" → SaaS default)
+  ✅ Database:  PostgreSQL (detected: "SaaS" → multi-tenant)
+  ✅ Testing:   Strict TDD (default)
+  ✅ Snapshots: Yes (default)
+  ❓ Mobile:    Not mentioned — do you need one?
+═══════════════════════════════════════════
+```
+
+**One prompt. Zero friction. Full control.** If Gohar gets something wrong, just tell him to change it.
+
+---
+
+## 💡 Intelligent Model Routing
+
+Why burn Opus/o3 tokens on a README update? Zeoel assigns a **complexity tier** to every task and recommends the cheapest model that can do the job:
+
+| Tier | When | Example Models | Cost |
+|------|------|---------------|------|
+| 🟢 **Light** | Docs, config, boilerplate, simple tests | `claude-3.5-haiku`, `gpt-4o-mini`, `gemini-flash` | 💰 |
+| 🟡 **Standard** | Components, APIs, CRUD, UI, unit tests | `claude-sonnet-4`, `gpt-4o`, `gemini-2.5-pro` | 💰💰 |
+| 🔴 **Complex** | Architecture, security, debugging, 3D, ML | `claude-opus-4`, `o3`, `gemini-2.5-pro` (thinking) | 💰💰💰 |
+
+Every task in the sprint plan includes its tier, so you know exactly where your tokens are going:
+
+```
+═══════════════════════════════════════════
+  DISPATCHING: Karar (Sr. Frontend Engineer)
+  Task: #4 — Build the pricing page
+  Skills: nextjs-turbopack, frontend-design
+  Tests: Component test + route test
+  Model Tier: 🟡 Standard
+  Recommended: claude-sonnet-4
+═══════════════════════════════════════════
+```
+
+**Result**: Up to 60% fewer tokens on a typical sprint by routing simple tasks to fast, cheap models.
 
 ---
 
@@ -114,6 +168,7 @@ Each agent has a distinct persona, curated skill pack, and defined responsibilit
 | ⛓️ | Web3 Engineer | **Salman** | Smart contracts, DeFi, AMM security, Solidity |
 | 💼 | Business Operations | **Maryam** | SaaS billing ops, logistics, startup metrics |
 | 🌐 | React Native Specialist | **Zayd** | React Native, Expo, native integration, performance |
+| 📋 | Product Manager | **Zainab** | Agile sprint management, user story mapping, backlog grooming |
 
 *All agent names are inspired by Ahle Bait (a.s.) and the Zeoel team.*
 

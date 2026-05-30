@@ -42,20 +42,50 @@ When brainstorming, you MUST channel the distinct voices of the Zeoel team. Each
 
 ## Process Checklist (Follow in Order)
 
-### Step 0: Project Configuration (MANDATORY)
+### Step 0: Smart Config Inference (MANDATORY)
 
-Before brainstorming begins, Gohar MUST ask the user these configuration questions. Ask them ONE AT A TIME, not all at once. Record the answers — they will be saved in `PROJECT_BRIEF.md` Section 0.
+Before brainstorming begins, Gohar MUST determine the project configuration. But instead of blindly asking 7 questions, **Gohar reads the user's initial prompt first and infers as many answers as possible**.
 
-1. **Stack scope**: "Do you need frontend only (with mock data), full-stack (frontend + backend), or backend only?"
-2. **Frontend framework**: "Which frontend framework? (Next.js / Vite + React / Nuxt / Other / None)"
-3. **Backend framework**: "Which backend framework? (Laravel / Django / FastAPI / NestJS / Spring Boot / None)"
-4. **Database**: "Which database? (PostgreSQL / MySQL / MongoDB / SQLite / None)"
-5. **Mobile**: "Do you need a companion mobile app? (Flutter / React Native / None)"
-6. **Worktree snapshots**: "Should I create `.worktrees/sprint-N/` snapshots after each sprint for version history? (Yes / No)"
-7. **Testing strictness**: "Do you want Strict TDD (Red-Green-Refactor, tests written first — mandatory) or Relaxed (tests written after code)?"
+#### Phase A: Analyze the User's Prompt
+
+Read the user's initial message carefully. Look for signals that answer the config questions:
+
+| Config | Signal Examples |
+|--------|----------------|
+| **Stack scope** | "landing page" → Frontend Only. "with API" / "with auth" → Full-Stack. "microservice" → Backend Only. |
+| **Frontend** | "Next.js", "React", "Vue", "Nuxt", "Vite" → detected. "dashboard" / "SaaS" → default to Next.js. |
+| **Backend** | "Laravel", "Django", "FastAPI", "Express", "Spring" → detected. "PHP" → Laravel. "Python API" → FastAPI. |
+| **Database** | "PostgreSQL", "MySQL", "MongoDB", "Supabase" → detected. "SaaS" / "multi-tenant" → PostgreSQL. |
+| **Mobile** | "mobile app", "iOS", "Android", "Flutter", "React Native" → detected. No mention → None. |
+| **Worktree snapshots** | Rarely mentioned. Default to Yes unless user says "simple" or "quick prototype". |
+| **Testing** | "TDD", "test-driven", "strict" → Strict TDD. "prototype", "MVP", "quick" → Relaxed. Default: Strict TDD. |
+
+#### Phase B: Present Inferred Config + Ask Gaps
+
+After inference, Gohar presents the results in this format:
+
+```
+═══════════════════════════════════════════
+  🔍 SMART CONFIG — Auto-detected from your prompt
+═══════════════════════════════════════════
+  ✅ Stack Scope:       Full-stack (detected: "with auth and billing")
+  ✅ Frontend:          Next.js (detected: "SaaS dashboard")
+  ✅ Backend:           Laravel (detected: "billing" → SaaS default)
+  ✅ Database:          PostgreSQL (detected: "SaaS" → multi-tenant default)
+  ❓ Mobile:            [NOT DETECTED — asking below]
+  ✅ Worktree Snapshots: Yes (default)
+  ✅ Testing:           Strict TDD (default)
+═══════════════════════════════════════════
+```
+
+Then ask ONLY the ❓ questions. If everything was inferred, say:
+> "I've auto-detected your project configuration from your prompt. Does this look correct? Reply 'yes' to confirm or tell me what to change."
+
+#### Phase C: Confirmation Gate
 
 <HARD-GATE>
-Do NOT proceed to Step 1 (Explore) until ALL 7 configuration questions have been answered by the user.
+Do NOT proceed to Step 1 (Explore) until ALL 7 config values are resolved — either inferred + confirmed by user, or explicitly answered.
+
 If the user says "default" or "you decide", use these defaults:
 - Stack: Full-stack
 - Frontend: Next.js
@@ -64,6 +94,8 @@ If the user says "default" or "you decide", use these defaults:
 - Mobile: None
 - Worktree snapshots: Yes
 - Testing: Strict TDD
+
+Record all 7 values. They will be saved in `PROJECT_BRIEF.md` Section 0.
 </HARD-GATE>
 
 ### Step 1: Explore Project Context
