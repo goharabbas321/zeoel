@@ -69,5 +69,8 @@
     "README.md",
     "SETUP.md",
     "USER_MANUAL.md"
-  ]
+  ],
+  "devDependencies": {
+    "skills": "^1.5.9"
+  }
 }

@@ -50,7 +50,12 @@ try {
         fs.mkdirSync(dirPath);
       }
     }
+  }
 
+  // Self-healing check and installation of Caveman and Graphify
+  ensureCavemanAndGraphify();
+
+  if (copiedSomething) {
     console.log('\n✅ Successfully initialized Zeoel Framework!');
     console.log('----------------------------------------------------');
     console.log('You are now the Product Owner.');
@@ -63,6 +68,125 @@ try {
     console.log('\n✅ Zeoel Framework is already fully initialized in this directory.');
   }
 } catch (error) {
-  console.error('❌ Failed to copy Zeoel framework files:', error.message);
+  console.error('❌ Failed to initialize Zeoel framework:', error.message);
   process.exit(1);
 }
+
+function ensureCavemanAndGraphify() {
+  const cwd = process.cwd();
+  console.log('\n🔍 Verification Phase: Checking token-saving engines...');
+
+  // 1. Check & Install Caveman (via skills package)
+  let skillsInstalled = false;
+  try {
+    execSync('npx --no-install skills --version', { stdio: 'ignore' });
+    skillsInstalled = true;
+  } catch (e) {
+    // Not installed
+  }
+
+  if (!skillsInstalled) {
+    console.log('📦 Caveman (skills CLI) is not installed. Installing specifically to the codebase...');
+    try {
+      execSync('npm install --save-dev skills', { cwd, stdio: 'inherit' });
+      console.log('✅ Successfully installed skills CLI locally!');
+    } catch (e) {
+      console.error('⚠️ Failed to install skills CLI locally. Attempting to run via npx directly...', e.message);
+    }
+  }
+
+  // Always run or ensure Caveman is added
+  console.log('🪓 Initializing Caveman prompt compression rules...');
+  try {
+    execSync('npx skills add juliusbrussee/caveman', { cwd, stdio: 'inherit' });
+    console.log('✅ Caveman rules are successfully integrated!');
+  } catch (e) {
+    console.error('⚠️ Warning: Failed to register Caveman skill:', e.message);
+  }
+
+  // 2. Check & Install Graphify (via graphifyy PyPI package)
+  let graphifyInstalled = false;
+  try {
+    execSync('graphify --version', { stdio: 'ignore' });
+    graphifyInstalled = true;
+  } catch (e) {
+    // Not installed
+  }
+
+  if (!graphifyInstalled) {
+    console.log('📊 Graphify is not installed. Checking for Python/pip/uv to install it...');
+    let installedGraphify = false;
+
+    // Check uv first
+    try {
+      execSync('command -v uv', { stdio: 'ignore' });
+      console.log('🚀 Found uv. Installing graphifyy via uv tool...');
+      execSync('uv tool install graphifyy', { stdio: 'inherit' });
+      installedGraphify = true;
+    } catch (e) {
+      // uv not available or failed
+    }
+
+    if (!installedGraphify) {
+      // Check pipx
+      try {
+        execSync('command -v pipx', { stdio: 'ignore' });
+        console.log('🚀 Found pipx. Installing graphifyy via pipx...');
+        execSync('pipx install graphifyy', { stdio: 'inherit' });
+        installedGraphify = true;
+      } catch (e) {
+        // pipx not available or failed
+      }
+    }
+
+    if (!installedGraphify) {
+      // Check standard pip/pip3
+      try {
+        let pipCmd = '';
+        try {
+          pipCmd = execSync('command -v pip3 || command -v pip', { encoding: 'utf8' }).trim();
+        } catch (err) {
+          // Ignore command-v failure
+        }
+        if (pipCmd) {
+          console.log(`🚀 Found pip at ${pipCmd}. Installing graphifyy...`);
+          try {
+            execSync(`${pipCmd} install graphifyy --break-system-packages`, { stdio: 'inherit' });
+            installedGraphify = true;
+          } catch (e) {
+            try {
+              execSync(`${pipCmd} install graphifyy`, { stdio: 'inherit' });
+              installedGraphify = true;
+            } catch (err) {
+              console.error('⚠️ Standard pip installation failed:', err.message);
+            }
+          }
+        }
+      } catch (e) {
+        // Ignored
+      }
+    }
+
+    if (installedGraphify) {
+      console.log('✅ Graphify engine successfully installed!');
+      graphifyInstalled = true;
+    } else {
+      console.warn('⚠️ Graphify python engine could not be auto-installed. Please install it manually with:\n  pip install graphifyy  or  uv tool install graphifyy');
+    }
+  } else {
+    console.log('✅ Graphify engine is already installed!');
+    graphifyInstalled = true;
+  }
+
+  // Register graphify skill if installed
+  if (graphifyInstalled) {
+    console.log('📊 Registering Graphify skill with AI assistants...');
+    try {
+      execSync('graphify install', { cwd, stdio: 'inherit' });
+      console.log('✅ Graphify skill successfully registered!');
+    } catch (e) {
+      console.error('⚠️ Warning: Failed to register Graphify skill:', e.message);
+    }
+  }
+}
+
