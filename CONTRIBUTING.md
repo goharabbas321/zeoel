@@ -130,7 +130,7 @@ No build step is required — Zeoel is a file-based framework.
 
 1. **Branch** from `main` with a descriptive name: `skill/tailwindcss-v4` or `fix/readme-typo`
 2. **Commit** with clear messages: `feat(skill): add tailwindcss-v4 patterns`
-3. **Test** that `npx zeoel init` still works
+3. **Test** that `npx zeoel-ai init` still works
 4. **Fill out** the PR template completely
 5. **Wait** for review — we aim to respond within 48 hours
 

@@ -31,10 +31,10 @@ You need **Node.js 18+** and at least one of the supported AI CLI tools installe
 
 ```bash
 # Install globally (recommended)
-npm install -g zeoel
+npm install -g zeoel-ai
 
 # Or run directly with npx (no install)
-npx zeoel
+npx zeoel-ai
 ```
 
 ### Initialize in Your Project
@@ -851,7 +851,7 @@ zeoel agent inspect my-agent
 ## 11. Contact & Support
 
 - **GitHub**: [goharabbas321/zeoel](https://github.com/goharabbas321/zeoel)
-- **NPM**: [zeoel](https://www.npmjs.com/package/zeoel)
+- **NPM**: [zeoel-ai](https://www.npmjs.com/package/zeoel-ai)
 - **Creator**: Gohar Abbas ([@goharabbas321](https://github.com/goharabbas321))
 - **Telegram**: [@goharabbas786](https://t.me/goharabbas786)
 
