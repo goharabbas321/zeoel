@@ -458,7 +458,11 @@ function scanAssistantCLIs() {
   for (const [key, eng] of Object.entries(engines)) {
     if (!eng.path) continue;
     try {
-      let raw = execSync(eng.modelsCmd(eng.path), { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+      let raw = execSync(eng.modelsCmd(eng.path), { 
+        encoding: 'utf8', 
+        stdio: ['ignore', 'pipe', 'ignore'],
+        timeout: 3000 // Prevent hanging if command is interactive or spawns a blocking browser
+      });
 
       // Try JSON parse first (codex returns JSON)
       let models = [];
