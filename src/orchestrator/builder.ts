@@ -113,5 +113,14 @@ export function buildPrompt(
 
   parts.push(section("Output Requirements", outputLines));
 
+  // ── 10. Codebase Containment Rules ──────────────────────────────────────────
+  const containmentRules = [
+    `- **Strict Containment Rules (ZERO EXCEPTIONS)**:`,
+    `  - All frontend-related source files, styles, assets, and components MUST be written inside the \`frontend/\` directory.`,
+    `  - All backend-related source files, APIs, migrations, schemas, and logic MUST be written inside the \`backend/\` directory.`,
+    `  - NEVER create application code, pages, styles, or implementation files at the root of the workspace. Keep the root clean.`,
+  ].join("\n");
+  parts.push(section("Codebase Containment Rules", containmentRules));
+
   return parts.join("\n");
 }

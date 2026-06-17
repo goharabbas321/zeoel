@@ -27,7 +27,7 @@ export { AgentManifestSchema, validateManifest } from "./schema";
 export { loadYaml, loadMarkdown, resolveAgentPath, loadAgent } from "./loader";
 
 // Registry
-export { discoverAgents, loadRegistry, getAgent } from "./registry";
+export { discoverAgents, loadRegistry, getAgent, resolveAgentIdAlias } from "./registry";
 export type { RegistryLoadResult } from "./registry";
 
 // Prompt building

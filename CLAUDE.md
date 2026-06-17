@@ -32,39 +32,39 @@ The complete Zeoel framework is at [skills/zeoel/SKILL.md](skills/zeoel/SKILL.md
 
 | Agent | File | Dispatch For | Primary Skills (⭐) |
 |-------|------|-------------|---------------------|
-| **Gohar** (CEO) | [agent.yml](agents/gohar-ceo/agent.yml) | Sprint planning, snapshots | `zeoel`, `caveman`, `graphify` |
-| **Mahdi** (Designer) | [agent.yml](agents/mahdi-designer/agent.yml) | UX flows, accessibility | `frontend-design`, `seo` |
-| **Mustafa** (Visual) | [agent.yml](agents/mustafa-visual/agent.yml) | 3D, GSAP, design tokens | `frontend-design`, `ui-ux-pro-max` |
-| **Karar** (Frontend) | [agent.yml](agents/karar-frontend/agent.yml) | Next.js, shadcn, TDD | `nextjs-turbopack`, `test-driven-development` |
-| **Hassan** (Bootstrap) | [agent.yml](agents/hassan-bootstrap/agent.yml) | Bootstrap 5, SCSS, Dashboards | `bootstrap-patterns`, `frontend-design` |
-| **Noor** (shadcn/UI) | [agent.yml](agents/noor-shadcn/agent.yml) | Component Variant Architecture | `shadcn-ui-patterns`, `radix-ui-primitives` |
-| **Anas** (React) | [agent.yml](agents/anas-react/agent.yml) | Pure React/Vite SPAs, Zustand | `vite-patterns`, `frontend-design`, `caveman`, `graphify` |
-| **Amina** (Vue/Nuxt) | [agent.yml](agents/amina-vue/agent.yml) | Vue 3, Nuxt 4, Pinia, SSR | `vue3-composition-patterns`, `nuxt4-patterns` |
-| **Hasan** (CSS Craftsman) | [agent.yml](agents/hasan-css/agent.yml) | Container queries, Transitions | `css-container-queries`, `tailwindcss-v4` |
-| **Tariq** (Backend) | [agent.yml](agents/tariq-backend/agent.yml) | Laravel, PostgreSQL, APIs | `laravel-patterns`, `test-driven-development` |
-| **Zara** (SEO) | [agent.yml](agents/zara-content/agent.yml) | Technical SEO, JSON-LD | `seo`, `seo-growth` |
-| **Abdullah** (Mobile) | [agent.yml](agents/abdullah-mobile/agent.yml) | Flutter, Material 3 | `dart-flutter-patterns` |
-| **Zayd** (React Native) | [agent.yml](agents/zayd-react-native/agent.yml) | React Native, Expo | `react-native-best-practices` |
-| **Fatima** (Data) | [agent.yml](agents/fatima-data/agent.yml) | Analytics, ML | `postgres-patterns`, `python-patterns` |
-| **Abbas** (Python) | [agent.yml](agents/abbas-python/agent.yml) | Python, Django, FastAPI | `python-patterns`, `test-driven-development` |
-| **Bilal** (Systems) | [agent.yml](agents/bilal-systems/agent.yml) | Go, Rust, C++ | `go-patterns` |
-| **Layla** (iOS) | [agent.yml](agents/layla-ios/agent.yml) | SwiftUI, Swift | `swift-patterns` |
-| **Hamza** (Android) | [agent.yml](agents/hamza-android/agent.yml) | Kotlin, Jetpack Compose | `kotlin-patterns` |
-| **Salman** (Web3) | [agent.yml](agents/salman-web3/agent.yml) | Smart Contracts, DeFi | `solidity-patterns`, `trailofbits-auditing` |
-| **Hamid** (Security) | [agent.yml](agents/hamid-security/agent.yml) | Red Team & Penetration Auditor | `claude-red`, `trailofbits-auditing` |
-| **Farhan** (Growth) | [agent.yml](agents/farhan-marketing/agent.yml) | Funnel CRO & Performance Marketer | `growth-marketing`, `seo-growth` |
-| **Taha** (Slides) | [agent.yml](agents/taha-presentation/agent.yml) | McKinsey PPT & Pitch Designer | `ppt-mckinsey`, `ckm:slides` |
-| **Sami** (Spatial) | [agent.yml](agents/sami-computational/agent.yml) | Parametric GIS Spatial Designer | `computational-architecture`, `postgres-patterns` |
-| **Yahya** (PhD) | [agent.yml](agents/yahya-researcher/agent.yml) | Literature Synthesis & PhD Science | `empirical-research`, `deep-research` |
-| **Sajjad** (Debugger) | [agent.yml](agents/sajjad-debugger/agent.yml) | Root cause analysis | `systematic-debugging`, `error-handling` |
-| **Baqir** (Docs) | [agent.yml](agents/baqir-docs/agent.yml) | Technical writing, OpenAPI | `zeoel-codebase-knowledge`, `api-design` |
-| **Muhammad** (QA) | [agent.yml](agents/muhammad-qa/agent.yml) | E2E testing, quality gates | `e2e-testing`, `test-driven-development` |
-| **Ali** (DevOps) | [agent.yml](agents/ali-devops/agent.yml) | CI/CD, Docker, Security | `deployment-patterns` |
-| **Ibrahim** (AI Architect)| [agent.yml](agents/ibrahim-ai/agent.yml) | MCP, Multi-agent | `mcp-patterns`, `self-evolution` |
-| **Yusuf** (Java) | [agent.yml](agents/yusuf-java/agent.yml) | Spring Boot, Quarkus | `java-patterns` |
-| **Khadija** (Healthcare)| [agent.yml](agents/khadija-healthcare/agent.yml)| HIPAA, FHIR | `healthcare-compliance` |
-| **Maryam** (Business) | [agent.yml](agents/maryam-ops/agent.yml) | SaaS Ops, Metrics | `saas-ops` |
-| **Zainab** (Product Manager) | [agent.yml](agents/zainab-pm/agent.yml) | Sprints, Agile Backlog | `project-flow-ops`, `product-lens` |
+| **Gohar** (CEO - `gohar-ceo`) | [agent.yml](agents/gohar-ceo/agent.yml) | Sprint planning, snapshots | `zeoel`, `caveman`, `graphify` |
+| **Mahdi** (Designer - `mahdi-designer`) | [agent.yml](agents/mahdi-designer/agent.yml) | UX flows, accessibility | `frontend-design`, `seo` |
+| **Mustafa** (Visual - `mustafa-visual`) | [agent.yml](agents/mustafa-visual/agent.yml) | 3D, GSAP, design tokens | `frontend-design`, `ui-ux-pro-max` |
+| **Karar** (Frontend - `karar-frontend`) | [agent.yml](agents/karar-frontend/agent.yml) | Next.js, shadcn, TDD | `nextjs-turbopack`, `test-driven-development` |
+| **Hassan** (Bootstrap - `hassan-bootstrap`) | [agent.yml](agents/hassan-bootstrap/agent.yml) | Bootstrap 5, SCSS, Dashboards | `bootstrap-patterns`, `frontend-design` |
+| **Noor** (shadcn/UI - `noor-shadcn`) | [agent.yml](agents/noor-shadcn/agent.yml) | Component Variant Architecture | `shadcn-ui-patterns`, `radix-ui-primitives` |
+| **Anas** (React - `anas-react`) | [agent.yml](agents/anas-react/agent.yml) | Pure React/Vite SPAs, Zustand | `vite-patterns`, `frontend-design`, `caveman`, `graphify` |
+| **Amina** (Vue/Nuxt - `amina-vue`) | [agent.yml](agents/amina-vue/agent.yml) | Vue 3, Nuxt 4, Pinia, SSR | `vue3-composition-patterns`, `nuxt4-patterns` |
+| **Hasan** (CSS Craftsman - `hasan-css`) | [agent.yml](agents/hasan-css/agent.yml) | Container queries, Transitions | `css-container-queries`, `tailwindcss-v4` |
+| **Tariq** (Backend - `tariq-backend`) | [agent.yml](agents/tariq-backend/agent.yml) | Laravel, PostgreSQL, APIs | `laravel-patterns`, `test-driven-development` |
+| **Zara** (SEO - `zara-content`) | [agent.yml](agents/zara-content/agent.yml) | Technical SEO, JSON-LD | `seo`, `seo-growth` |
+| **Abdullah** (Mobile - `abdullah-mobile`) | [agent.yml](agents/abdullah-mobile/agent.yml) | Flutter, Material 3 | `dart-flutter-patterns` |
+| **Zayd** (React Native - `zayd-react-native`) | [agent.yml](agents/zayd-react-native/agent.yml) | React Native, Expo | `react-native-best-practices` |
+| **Fatima** (Data - `fatima-data`) | [agent.yml](agents/fatima-data/agent.yml) | Analytics, ML | `postgres-patterns`, `python-patterns` |
+| **Abbas** (Python - `abbas-python`) | [agent.yml](agents/abbas-python/agent.yml) | Python, Django, FastAPI | `python-patterns`, `test-driven-development` |
+| **Bilal** (Systems - `bilal-systems`) | [agent.yml](agents/bilal-systems/agent.yml) | Go, Rust, C++ | `go-patterns` |
+| **Layla** (iOS - `layla-ios`) | [agent.yml](agents/layla-ios/agent.yml) | SwiftUI, Swift | `swift-patterns` |
+| **Hamza** (Android - `hamza-android`) | [agent.yml](agents/hamza-android/agent.yml) | Kotlin, Jetpack Compose | `kotlin-patterns` |
+| **Salman** (Web3 - `salman-web3`) | [agent.yml](agents/salman-web3/agent.yml) | Smart Contracts, DeFi | `solidity-patterns`, `trailofbits-auditing` |
+| **Hamid** (Security - `hamid-security`) | [agent.yml](agents/hamid-security/agent.yml) | Red Team & Penetration Auditor | `claude-red`, `trailofbits-auditing` |
+| **Farhan** (Growth - `farhan-marketing`) | [agent.yml](agents/farhan-marketing/agent.yml) | Funnel CRO & Performance Marketer | `growth-marketing`, `seo-growth` |
+| **Taha** (Slides - `taha-presentation`) | [agent.yml](agents/taha-presentation/agent.yml) | McKinsey PPT & Pitch Designer | `ppt-mckinsey`, `ckm:slides` |
+| **Sami** (Spatial - `sami-computational`) | [agent.yml](agents/sami-computational/agent.yml) | Parametric GIS Spatial Designer | `computational-architecture`, `postgres-patterns` |
+| **Yahya** (PhD - `yahya-researcher`) | [agent.yml](agents/yahya-researcher/agent.yml) | Literature Synthesis & PhD Science | `empirical-research`, `deep-research` |
+| **Sajjad** (Debugger - `sajjad-debugger`) | [agent.yml](agents/sajjad-debugger/agent.yml) | Root cause analysis | `systematic-debugging`, `error-handling` |
+| **Baqir** (Docs - `baqir-docs`) | [agent.yml](agents/baqir-docs/agent.yml) | Technical writing, OpenAPI | `zeoel-codebase-knowledge`, `api-design` |
+| **Muhammad** (QA - `muhammad-qa`) | [agent.yml](agents/muhammad-qa/agent.yml) | E2E testing, quality gates | `e2e-testing`, `test-driven-development` |
+| **Ali** (DevOps - `ali-devops`) | [agent.yml](agents/ali-devops/agent.yml) | CI/CD, Docker, Security | `deployment-patterns` |
+| **Ibrahim** (AI Architect - `ibrahim-ai`)| [agent.yml](agents/ibrahim-ai/agent.yml) | MCP, Multi-agent | `mcp-patterns`, `self-evolution` |
+| **Yusuf** (Java - `yusuf-java`) | [agent.yml](agents/yusuf-java/agent.yml) | Spring Boot, Quarkus | `java-patterns` |
+| **Khadija** (Healthcare - `khadija-healthcare`)| [agent.yml](agents/khadija-healthcare/agent.yml)| HIPAA, FHIR | `healthcare-compliance` |
+| **Maryam** (Business - `maryam-ops`) | [agent.yml](agents/maryam-ops/agent.yml) | SaaS Ops, Metrics | `saas-ops` |
+| **Zainab** (Product Manager - `zainab-pm`) | [agent.yml](agents/zainab-pm/agent.yml) | Sprints, Agile Backlog | `project-flow-ops`, `product-lens` |
 
 All agent files are in [agents/](agents/).
 

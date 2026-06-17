@@ -22,6 +22,10 @@ After completing a task:
    - Status: `✅ Done`
    - Test files: list of created test files
    - Timestamp
+   
+   > [!IMPORTANT]
+   > **Strict Task Matching Guard**: When editing `progress.md`, you MUST target only the specific row matching the current task's unique ID/Number (e.g., `Task K`).
+   > NEVER use a global or generic search-and-replace on the agent's name (e.g. matching all lines containing `zara` or `mahdi`), as this will accidentally mark future or combined tasks (e.g. `zara + mahdi`) as completed prematurely. Ensure only the single, specific task row is modified.
 2. Run `/graphify . --update` to update the codebase semantic relationship graph.
 3. Update `docs/sprint-N/deferred.md` if any scope was deferred.
 4. Update relevant sections of `PROJECT_BRIEF.md` directly (such as Database Schema, API Specification, UI Layout Map) to reflect the exact implementation details.

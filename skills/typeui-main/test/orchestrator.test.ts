@@ -1,5 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { getRoleKeyForAgent } from "../../../src/orchestrator/index";
+import { getRoleKeyForAgent, resolveAgentIdAlias } from "../../../src/orchestrator/index";
+
+describe("orchestrator resolveAgentIdAlias", () => {
+  it("resolves Zara aliases correctly", () => {
+    expect(resolveAgentIdAlias("zara-seo")).toBe("zara-content");
+    expect(resolveAgentIdAlias("Zara")).toBe("zara-content");
+  });
+
+  it("resolves Farhan aliases correctly", () => {
+    expect(resolveAgentIdAlias("farhan-growth")).toBe("farhan-marketing");
+    expect(resolveAgentIdAlias("farhan")).toBe("farhan-marketing");
+  });
+
+  it("resolves other mismatched agent aliases", () => {
+    expect(resolveAgentIdAlias("taha-slides")).toBe("taha-presentation");
+    expect(resolveAgentIdAlias("sami-spatial")).toBe("sami-computational");
+    expect(resolveAgentIdAlias("yahya-phd")).toBe("yahya-researcher");
+    expect(resolveAgentIdAlias("maryam-business")).toBe("maryam-ops");
+    expect(resolveAgentIdAlias("zainab-product-manager")).toBe("zainab-pm");
+    expect(resolveAgentIdAlias("gohar")).toBe("gohar-ceo");
+  });
+
+  it("returns canonical ID unchanged", () => {
+    expect(resolveAgentIdAlias("karar-frontend")).toBe("karar-frontend");
+  });
+});
 
 describe("orchestrator getRoleKeyForAgent", () => {
   it("resolves security roles correctly", () => {
