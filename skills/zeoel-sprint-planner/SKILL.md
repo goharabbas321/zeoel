@@ -48,12 +48,12 @@ If a task involves multiple agents (e.g. a developer agent and a reviewer agent,
 - The script must first run the primary developer agent, and then run the reviewer agent to audit, review, or refine the code.
 - You MUST write separate, consecutive execution blocks (using the node path fallback template) for each agent sequentially. Do NOT combine them into a single run command.
 - Ensure each run block uses the node path fallback template. For example:
-  ```bash
+  ```sh
   # 1. Primary Development: Senior Frontend Engineer
-  if command -v zeoel >/dev/null 2>&1; then
+  if command -v zeoel > /dev/null 2>&1; then
     zeoel agent run karar-frontend "<development task description>" --engine <resolved_engine> -m <resolved_model> --live
   else
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
     if [ -f "$SCRIPT_DIR/../../../bin/zeoel.js" ]; then
       node "$SCRIPT_DIR/../../../bin/zeoel.js" agent run karar-frontend "<development task description>" --engine <resolved_engine> -m <resolved_model> --live
     elif [ -f "$HOME/.zeoel/bin/zeoel" ]; then
@@ -65,10 +65,10 @@ If a task involves multiple agents (e.g. a developer agent and a reviewer agent,
   fi
 
   # 2. Design Review: UX/UI Designer
-  if command -v zeoel >/dev/null 2>&1; then
+  if command -v zeoel > /dev/null 2>&1; then
     zeoel agent run mahdi-designer "Review the design system & layout shell created by Karar. Verify layout, accessibility, and visual tokens." --engine <resolved_engine> -m <resolved_model> --live
   else
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
     if [ -f "$SCRIPT_DIR/../../../bin/zeoel.js" ]; then
       node "$SCRIPT_DIR/../../../bin/zeoel.js" agent run mahdi-designer "Review the design system & layout shell created by Karar. Verify layout, accessibility, and visual tokens." --engine <resolved_engine> -m <resolved_model> --live
     elif [ -f "$HOME/.zeoel/bin/zeoel" ]; then
@@ -92,40 +92,50 @@ For every task in the sprint plan, Gohar CEO must forcefully generate a shell sc
 
 ### Master Run-All Script Template (`docs/sprint-N/run_all_tasks.sh`):
 
-> ⚠️ **QUOTING RULE**: The `SCRIPT_DIR` line MUST use `$0` (not `${BASH_SOURCE[0]}`) and MUST NOT nest double-quoted `$(...)` substitutions inside another double-quoted `$(...)`. Violating this causes `unexpected EOF while looking for matching` syntax errors.
+> ⚠️ **COMPATIBILITY RULE**: This script MUST be compatible with `/bin/sh`, `bash 3.2` (macOS default), and `zsh`. Do NOT use `mapfile`, `readarray`, or any bash 4+ builtins. Use `while IFS= read -r` loops instead. Always use `#!/bin/sh` as the shebang so the OS picks the right shell automatically.
 
-```bash
-#!/bin/bash
+```sh
+#!/bin/sh
 # Zeoel Master Sprint Execution Script - Sprint N
 # Executes all tasks sequentially.
+# Compatible with: sh, bash 3.2+, zsh (macOS, Linux, Windows/WSL)
 
-set -euo pipefail
+set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "🏁 Starting Master Execution for Sprint N..."
 echo ""
 
-# Find and sort all task scripts under tasks/
-mapfile -t tasks < <(find "$SCRIPT_DIR/tasks" -maxdepth 1 -name 'task_*.sh' | sort -V)
+# Collect and sort task scripts (POSIX-compatible, no mapfile/readarray)
+TASKS_DIR="$SCRIPT_DIR/tasks"
 
-if [ "${#tasks[@]}" -eq 0 ]; then
-  echo "❌ No task scripts found in $SCRIPT_DIR/tasks!"
+if [ ! -d "$TASKS_DIR" ]; then
+  echo "❌ Tasks directory not found: $TASKS_DIR"
   exit 1
 fi
 
-for task_script in "${tasks[@]}"; do
+found=0
+find "$TASKS_DIR" -maxdepth 1 -name 'task_*.sh' | sort | while IFS= read -r task_script; do
+  found=1
   task_name="$(basename "$task_script")"
   echo "--------------------------------------------------------"
   echo "📋 Running: $task_name"
   echo "--------------------------------------------------------"
 
-  bash "$task_script"
+  sh "$task_script"
   if [ $? -ne 0 ]; then
     echo "❌ Error: $task_name failed! Aborting sprint execution."
     exit 1
   fi
 done
+
+# Check if any tasks were found (find exits with 0 even when empty)
+task_count=$(find "$TASKS_DIR" -maxdepth 1 -name 'task_*.sh' | wc -l | tr -d ' ')
+if [ "$task_count" -eq 0 ]; then
+  echo "❌ No task scripts found in $TASKS_DIR!"
+  exit 1
+fi
 
 echo ""
 echo "🎉 All tasks in Sprint N executed successfully!"
@@ -136,12 +146,13 @@ The script file MUST contain the actual zeoel execution command(s) to run the ta
 The script file MUST use this template structure (adapted for single or multiple agents):
 
 ### Single Agent Example:
-```bash
-#!/bin/bash
+```sh
+#!/bin/sh
 # Zeoel Task Execution Script - Sprint N, Task K
 # Agent: <agent-id>
 # Model: <resolved-model>
 # Description: <task_description>
+# Compatible with: sh, bash 3.2+, zsh (macOS, Linux, Windows/WSL)
 
 echo "🚀 Executing Task K: <task_description>..."
 echo "👤 Agent: <agent-id>"
@@ -149,10 +160,10 @@ echo "🤖 Model: <resolved-model>"
 echo ""
 
 # Find framework command path or use node fallback
-if command -v zeoel >/dev/null 2>&1; then
+if command -v zeoel > /dev/null 2>&1; then
   zeoel agent run <agent-id> "<task_description>" --engine <resolved_engine> -m <resolved_model> --live
 else
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   if [ -f "$SCRIPT_DIR/../../../bin/zeoel.js" ]; then
     node "$SCRIPT_DIR/../../../bin/zeoel.js" agent run <agent-id> "<task_description>" --engine <resolved_engine> -m <resolved_model> --live
   elif [ -f "$HOME/.zeoel/bin/zeoel" ]; then
@@ -165,12 +176,13 @@ fi
 ```
 
 ### Multi-Agent Example (e.g., Karar + Mahdi):
-```bash
-#!/bin/bash
+```sh
+#!/bin/sh
 # Zeoel Task Execution Script - Sprint N, Task K
 # Agents: <agent-1> (primary), <agent-2> (reviewer)
 # Model: <resolved-model>
 # Description: <task_description>
+# Compatible with: sh, bash 3.2+, zsh (macOS, Linux, Windows/WSL)
 
 echo "🚀 Executing Task K: <task_description>..."
 echo "👤 Agents: <agent-1> + <agent-2>"
@@ -178,10 +190,10 @@ echo "🤖 Model: <resolved-model>"
 echo ""
 
 # 1. Primary Development
-if command -v zeoel >/dev/null 2>&1; then
+if command -v zeoel > /dev/null 2>&1; then
   zeoel agent run <agent-1> "<primary_development_task_description>" --engine <resolved_engine> -m <resolved_model> --live
 else
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   if [ -f "$SCRIPT_DIR/../../../bin/zeoel.js" ]; then
     node "$SCRIPT_DIR/../../../bin/zeoel.js" agent run <agent-1> "<primary_development_task_description>" --engine <resolved_engine> -m <resolved_model> --live
   elif [ -f "$HOME/.zeoel/bin/zeoel" ]; then
@@ -193,10 +205,10 @@ else
 fi
 
 # 2. Review / Audit / Polish
-if command -v zeoel >/dev/null 2>&1; then
+if command -v zeoel > /dev/null 2>&1; then
   zeoel agent run <agent-2> "Review and audit the work completed by <agent-1> for task K. Verify against requirements: <task_description>." --engine <resolved_engine> -m <resolved_model> --live
 else
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   if [ -f "$SCRIPT_DIR/../../../bin/zeoel.js" ]; then
     node "$SCRIPT_DIR/../../../bin/zeoel.js" agent run <agent-2> "Review and audit the work completed by <agent-1> for task K. Verify against requirements: <task_description>." --engine <resolved_engine> -m <resolved_model> --live
   elif [ -f "$HOME/.zeoel/bin/zeoel" ]; then

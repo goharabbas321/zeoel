@@ -507,7 +507,7 @@ async function cmdSprintDesign(restArgs) {
     console.log(`\n   To execute all tasks, run:`);
     console.log(`     zeoel sprint execute ${sprintNum}`);
     console.log(`   Or run the master script directly:`);
-    console.log(`     bash docs/sprint-${sprintNum}/run_all_tasks.sh`);
+    console.log(`     sh docs/sprint-${sprintNum}/run_all_tasks.sh`);
   } else {
     console.log(`\n❌ Sprint ${sprintNum} planning is INCOMPLETE.`);
     console.log(`   Complete Phase 2 (Sprint Planning) first.`);
@@ -553,7 +553,7 @@ async function cmdSprintExecute(restArgs) {
   console.log('─'.repeat(64));
 
   try {
-    execSync(`bash "${masterScript}"`, { stdio: 'inherit', cwd });
+    execSync(`sh "${masterScript}"`, { stdio: 'inherit', cwd });
     console.log('─'.repeat(64));
     console.log(`\n🏁 Sprint ${sprintNum} execution complete!`);
   } catch (err) {
