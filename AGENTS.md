@@ -17,12 +17,12 @@ Read the full framework FIRST: [skills/zeoel/SKILL.md](skills/zeoel/SKILL.md)
 
 ## The Pipeline
 
-| Phase | Skill to Read | Deliverables |
-|-------|--------------|-------------|
-| 1. Brainstorm | [skills/zeoel-brainstorm/SKILL.md](skills/zeoel-brainstorm/SKILL.md) | `PROJECT_BRIEF.md`, `docs/brainstorm/summary.md` |
-| 2. Sprint Plan | [skills/zeoel-sprint-planner/SKILL.md](skills/zeoel-sprint-planner/SKILL.md) | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md` |
-| 3. Execute | [skills/zeoel-dispatch/SKILL.md](skills/zeoel-dispatch/SKILL.md) | Working code via Red-Green-Refactor TDD |
-| 4. Verify & Snapshot| Dispatch QA + Security + SEO | `done.md`, and `.worktrees/sprint-N/` snapshot |
+| Phase | Skill to Read | Deliverables | CLI |
+|-------|--------------|-------------|-----|
+| 1. Brainstorm | [skills/zeoel-brainstorm/SKILL.md](skills/zeoel-brainstorm/SKILL.md) | `PROJECT_BRIEF.md`, `docs/brainstorm/summary.md` | `bash .zeoel/commands/start.sh` |
+| 2. Sprint Plan | [skills/zeoel-sprint-planner/SKILL.md](skills/zeoel-sprint-planner/SKILL.md) | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md`, `run_all_tasks.sh` | `zeoel sprint design N` |
+| 3. Execute | [skills/zeoel-dispatch/SKILL.md](skills/zeoel-dispatch/SKILL.md) | Working code via Red-Green-Refactor TDD | `zeoel sprint execute N` |
+| 4. Verify & Snapshot| Dispatch QA + Security + SEO | `done.md`, and `.worktrees/sprint-N/` snapshot | — |
 
 ## Agents (33)
 

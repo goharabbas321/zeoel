@@ -148,14 +148,23 @@ Before writing any code, Gohar (CEO) MUST isolate the workspace to prevent accid
 
 ### Phase 3: Execution (zeoel-dispatch + caveman + graphify)
 
-During execution (Phase 3), the sprint tasks can be run using the sprint execution harness:
+During execution (Phase 3), tasks are run using the sprint execution harness built during Phase 2.
 
-- **Auto Mode (Default)**: Gohar CEO automatically executes all tasks in the sprint sequentially.
-- **Manual Mode**: Gohar CEO prompts for confirmation before running each task, allowing step-by-step review.
-
-To execute a sprint, run:
+**Before executing, validate planning is complete:**
 ```bash
-zeoel sprint run <sprint-number> [--mode auto|manual]
+zeoel sprint design <sprint-number>
+```
+This checks that `plan.md`, `progress.md`, `run_all_tasks.sh`, and all task scripts exist.
+
+**To execute all sprint tasks:**
+```bash
+zeoel sprint execute <sprint-number>
+```
+This runs `docs/sprint-N/run_all_tasks.sh` which executes all `task_K.sh` scripts sequentially.
+
+You can also run individual tasks directly:
+```bash
+bash docs/sprint-N/tasks/task_1.sh
 ```
 
 For each task in the sprint, you MUST dispatch the assigned agent by:

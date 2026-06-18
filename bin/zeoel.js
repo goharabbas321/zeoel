@@ -62,21 +62,21 @@ function printGeneralHelp() {
   Zeoel AI Agency Framework CLI
 
   Usage:
-    zeoel                        → Initialize/update framework globally & register command
-    zeoel agent list             → List all discovered agents
-    zeoel agent inspect <id>     → Show full manifest + loaded skills
+    zeoel                         → Initialize/update framework globally & register command
+    zeoel agent list              → List all discovered agents
+    zeoel agent inspect <id>      → Show full manifest + loaded skills
     zeoel agent run <id> "<task>" → Build prompt and run (dry-run by default)
-      --live                     → Call real LLM (requires API keys / local CLI)
-      -m, --model <model>        → Override model (e.g. gemini-2.5-flash)
-      --engine <cli>             → Override engine (claude|opencode|codex|agy)
-      --criteria "<text>"        → Set acceptance criteria
-      --output <path>            → Save session output to custom path
+      --live                      → Call real LLM (requires API keys / local CLI)
+      -m, --model <model>         → Override model (e.g. gemini-2.5-flash)
+      --engine <cli>              → Override engine (claude|opencode|codex|agy)
+      --criteria "<text>"         → Set acceptance criteria
+      --output <path>             → Save session output to custom path
 
-    zeoel sprint run <sprintNum> → Run tasks in a sprint (auto by default)
-      --mode <auto|manual>       → Override default execution mode
+    zeoel sprint design [N]       → Validate sprint N planning docs exist (Phase 2 check)
+    zeoel sprint execute [N]      → Execute all tasks in sprint N (runs run_all_tasks.sh)
 
-    zeoel --version, -v          → Print zeoel version
-    zeoel --help, -h             → Print this help message
+    zeoel --version, -v           → Print zeoel version
+    zeoel --help, -h              → Print this help message
   `);
 }
 
@@ -390,8 +390,10 @@ function printAgentHelp() {
 
 async function runSprintCommand(subcommand, restArgs) {
   switch (subcommand) {
-    case 'run':
-      return cmdSprintRun(restArgs);
+    case 'design':
+      return cmdSprintDesign(restArgs);
+    case 'execute':
+      return cmdSprintExecute(restArgs);
     default:
       printSprintHelp();
       process.exit(0);
@@ -403,237 +405,164 @@ function printSprintHelp() {
   zeoel sprint <subcommand>
 
   Subcommands:
-    run [<sprint-number>] [flags]  Run tasks in a sprint
-
-  Flags for "run":
-    --mode <auto|manual>        Override the configured execution mode (auto or manual)
+    design  [<sprint-number>]   Validate that planning docs exist for sprint N (Phase 2 check)
+    execute [<sprint-number>]   Execute all tasks in sprint N by running run_all_tasks.sh
 
   Examples:
-    zeoel sprint run 1
-    zeoel sprint run 2 --mode manual
+    zeoel sprint design 1
+    zeoel sprint execute 1
+    zeoel sprint execute 2
   `);
 }
 
-async function cmdSprintRun(restArgs) {
-  let sprintNumStr = restArgs.find(arg => !arg.startsWith('-'));
-  const modeIdx = restArgs.indexOf('--mode');
-  let cliMode = modeIdx >= 0 ? restArgs[modeIdx + 1] : undefined;
-
-  const cwd = process.cwd();
-
-  // 1. Auto-detect sprint number if not provided
-  let sprintNum = 1;
+/** Resolve sprint number from args, PROJECT_BRIEF.md, or docs/ directories */
+function resolveSprintNum(restArgs) {
+  const sprintNumStr = restArgs.find(arg => !arg.startsWith('-'));
   if (sprintNumStr) {
-    sprintNum = parseInt(sprintNumStr, 10);
-    if (isNaN(sprintNum)) {
+    const n = parseInt(sprintNumStr, 10);
+    if (isNaN(n)) {
       console.error(`❌ Invalid sprint number: ${sprintNumStr}`);
       process.exit(1);
     }
-  } else {
-    // Try matching from PROJECT_BRIEF.md
-    const briefPath = path.join(cwd, 'PROJECT_BRIEF.md');
-    let detected = false;
-    if (fs.existsSync(briefPath)) {
-      try {
-        const briefContent = fs.readFileSync(briefPath, 'utf8');
-        const sprintMatch = briefContent.match(/Current Sprint:\s*Sprint\s*(\d+)/i);
-        if (sprintMatch) {
-          sprintNum = parseInt(sprintMatch[1], 10);
-          console.log(`🔍 Auto-detected current sprint from PROJECT_BRIEF.md: Sprint ${sprintNum}`);
-          detected = true;
-        }
-      } catch (e) {
-        // ignore
-      }
-    }
-    if (!detected) {
-      // Look at existing docs/sprint-N directories
-      let maxSprint = 0;
-      try {
-        const docsDir = path.join(cwd, 'docs');
-        if (fs.existsSync(docsDir)) {
-          const files = fs.readdirSync(docsDir);
-          for (const file of files) {
-            const match = file.match(/^sprint-(\d+)$/i);
-            if (match) {
-              const num = parseInt(match[1], 10);
-              if (num > maxSprint) maxSprint = num;
-            }
-          }
-        }
-      } catch (e) {
-        // ignore
-      }
-      if (maxSprint > 0) {
-        sprintNum = maxSprint;
-        console.log(`🔍 Auto-detected sprint from docs/ directory: Sprint ${sprintNum}`);
-      } else {
-        console.log(`ℹ️ No current sprint detected. Defaulting to Sprint 1.`);
-        sprintNum = 1;
-      }
-    }
+    return n;
   }
 
-  // 2. Resolve execution mode
-  let executionMode = 'auto'; // default fallback
-  const configPath = path.join(cwd, 'zeoel.config.json');
-  if (fs.existsSync(configPath)) {
+  const cwd = process.cwd();
+
+  // Try PROJECT_BRIEF.md
+  const briefPath = path.join(cwd, 'PROJECT_BRIEF.md');
+  if (fs.existsSync(briefPath)) {
     try {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-      if (config.execution_mode) {
-        executionMode = config.execution_mode;
+      const content = fs.readFileSync(briefPath, 'utf8');
+      const m = content.match(/Current Sprint:\s*Sprint\s*(\d+)/i);
+      if (m) {
+        const n = parseInt(m[1], 10);
+        console.log(`🔍 Auto-detected current sprint from PROJECT_BRIEF.md: Sprint ${n}`);
+        return n;
       }
-    } catch (e) {
-      // ignore
-    }
-  }
-  if (cliMode) {
-    if (cliMode === 'auto' || cliMode === 'manual') {
-      executionMode = cliMode;
-    } else {
-      console.warn(`⚠️ Invalid mode flag "${cliMode}". Using configured mode: ${executionMode}`);
-    }
+    } catch { /* ignore */ }
   }
 
-  console.log(`\n🏁 Starting Zeoel Sprint Runner`);
-  console.log(`   Sprint: ${sprintNum}`);
-  console.log(`   Mode:   ${executionMode.toUpperCase()}\n`);
-
-  const progressPath = path.join(cwd, 'docs', `sprint-${sprintNum}`, 'progress.md');
-  const tasksDir = path.join(cwd, 'docs', `sprint-${sprintNum}`, 'tasks');
-
-  if (!fs.existsSync(progressPath)) {
-    console.error(`❌ Progress tracker not found: ${progressPath}`);
-    console.error(`   Make sure Phase 2 (Sprint Planning) is complete and progress.md exists.`);
-    process.exit(1);
-  }
-
-  if (!fs.existsSync(tasksDir)) {
-    console.error(`❌ Task execution scripts directory not found: ${tasksDir}`);
-    process.exit(1);
-  }
-
-  // 3. Find and sort all task scripts
-  let taskScripts = [];
+  // Try docs/sprint-N directories
+  let maxSprint = 0;
   try {
-    const files = fs.readdirSync(tasksDir);
-    for (const file of files) {
-      const match = file.match(/^task_(\d+)\.(sh|cmd)$/i);
-      if (match) {
-        const num = parseInt(match[1], 10);
-        // Avoid duplicate tasks if both .sh and .cmd exist
-        if (!taskScripts.some(t => t.num === num)) {
-          taskScripts.push({ num, file });
+    const docsDir = path.join(cwd, 'docs');
+    if (fs.existsSync(docsDir)) {
+      for (const file of fs.readdirSync(docsDir)) {
+        const m = file.match(/^sprint-(\d+)$/i);
+        if (m) {
+          const n = parseInt(m[1], 10);
+          if (n > maxSprint) maxSprint = n;
         }
       }
     }
-  } catch (e) {
-    console.error(`❌ Failed to read task scripts: ${e.message}`);
+  } catch { /* ignore */ }
+
+  if (maxSprint > 0) {
+    console.log(`🔍 Auto-detected sprint from docs/ directory: Sprint ${maxSprint}`);
+    return maxSprint;
+  }
+
+  console.log(`ℹ️  No sprint detected. Defaulting to Sprint 1.`);
+  return 1;
+}
+
+/**
+ * zeoel sprint design [N]
+ * Validates that Phase 2 planning documents exist for sprint N.
+ */
+async function cmdSprintDesign(restArgs) {
+  const sprintNum = resolveSprintNum(restArgs);
+  const cwd = process.cwd();
+  const sprintDir = path.join(cwd, 'docs', `sprint-${sprintNum}`);
+
+  console.log(`\n📐 Zeoel Sprint Design Check — Sprint ${sprintNum}\n`);
+
+  const checks = [
+    { file: path.join(cwd, 'PROJECT_BRIEF.md'),                 label: 'PROJECT_BRIEF.md' },
+    { file: path.join(sprintDir, 'plan.md'),                    label: `docs/sprint-${sprintNum}/plan.md` },
+    { file: path.join(sprintDir, 'progress.md'),                label: `docs/sprint-${sprintNum}/progress.md` },
+    { file: path.join(sprintDir, 'deferred.md'),                label: `docs/sprint-${sprintNum}/deferred.md` },
+    { file: path.join(sprintDir, 'tasks'),                      label: `docs/sprint-${sprintNum}/tasks/` },
+    { file: path.join(sprintDir, 'run_all_tasks.sh'),           label: `docs/sprint-${sprintNum}/run_all_tasks.sh` },
+  ];
+
+  let allOk = true;
+  for (const check of checks) {
+    const exists = fs.existsSync(check.file);
+    console.log(`  ${exists ? '✅' : '❌'} ${check.label}`);
+    if (!exists) allOk = false;
+  }
+
+  // Count task scripts
+  const tasksDir = path.join(sprintDir, 'tasks');
+  let taskCount = 0;
+  if (fs.existsSync(tasksDir)) {
+    taskCount = fs.readdirSync(tasksDir).filter(f => /^task_\d+\.sh$/i.test(f)).length;
+  }
+  console.log(`\n  📋 Task scripts found: ${taskCount}`);
+
+  if (allOk) {
+    console.log(`\n✅ Sprint ${sprintNum} planning is complete!`);
+    console.log(`\n   To execute all tasks, run:`);
+    console.log(`     zeoel sprint execute ${sprintNum}`);
+    console.log(`   Or run the master script directly:`);
+    console.log(`     bash docs/sprint-${sprintNum}/run_all_tasks.sh`);
+  } else {
+    console.log(`\n❌ Sprint ${sprintNum} planning is INCOMPLETE.`);
+    console.log(`   Complete Phase 2 (Sprint Planning) first.`);
+    console.log(`   Ask your AI: "Plan Sprint ${sprintNum}" to generate the missing files.`);
+    process.exit(1);
+  }
+  console.log('');
+}
+
+/**
+ * zeoel sprint execute [N]
+ * Runs docs/sprint-N/run_all_tasks.sh to execute all planned tasks.
+ */
+async function cmdSprintExecute(restArgs) {
+  const sprintNum = resolveSprintNum(restArgs);
+  const cwd = process.cwd();
+  const sprintDir = path.join(cwd, 'docs', `sprint-${sprintNum}`);
+  const masterScript = path.join(sprintDir, 'run_all_tasks.sh');
+  const progressPath = path.join(sprintDir, 'progress.md');
+
+  console.log(`\n🚀 Zeoel Sprint Execute — Sprint ${sprintNum}\n`);
+
+  // Validate prerequisites
+  if (!fs.existsSync(progressPath)) {
+    console.error(`❌ progress.md not found: ${progressPath}`);
+    console.error(`   Run "zeoel sprint design ${sprintNum}" to check planning status.`);
     process.exit(1);
   }
 
-  taskScripts.sort((a, b) => a.num - b.num);
-
-  if (taskScripts.length === 0) {
-    console.log(`ℹ️ No task scripts found in ${tasksDir}.`);
-    process.exit(0);
+  if (!fs.existsSync(masterScript)) {
+    console.error(`❌ Master execution script not found: ${masterScript}`);
+    console.error(`   Complete Phase 2 planning first — the AI must generate run_all_tasks.sh.`);
+    process.exit(1);
   }
 
-  // Helper function to check if task is completed in progress.md
-  const isTaskCompleted = (taskNum) => {
-    try {
-      const progressContent = fs.readFileSync(progressPath, 'utf8');
-      const lines = progressContent.split('\n');
-      for (const line of lines) {
-        if (line.includes('|')) {
-          const cells = line.split('|').map(c => c.trim());
-          if (cells.length > 2) {
-            const firstCell = cells[1];
-            if (firstCell === String(taskNum) || firstCell === `Task ${taskNum}` || parseInt(firstCell, 10) === taskNum) {
-              const statusCell = cells.find(cell => 
-                cell.includes('✅') || 
-                cell.toLowerCase().includes('done') || 
-                cell.includes('⏭️') || 
-                cell.toLowerCase().includes('deferred')
-              );
-              if (statusCell) return true;
-            }
-          }
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-    return false;
-  };
+  // Ensure execute permission
+  try {
+    fs.chmodSync(masterScript, 0o755);
+  } catch { /* ignore on Windows */ }
 
-  // 4. Run loop
-  for (let i = 0; i < taskScripts.length; i++) {
-    const task = taskScripts[i];
-    const completed = isTaskCompleted(task.num);
+  console.log(`   Script:  ${masterScript}`);
+  console.log(`   Running all tasks for Sprint ${sprintNum}...\n`);
+  console.log('─'.repeat(64));
 
-    if (completed) {
-      console.log(`⏭️  Task ${task.num} is already completed. Skipping.`);
-      continue;
-    }
-
-    console.log(`\n────────────────────────────────────────────────────────────────`);
-    console.log(`📋 [Task ${task.num}/${taskScripts.length}] Preparing execution...`);
-    console.log(`────────────────────────────────────────────────────────────────`);
-
-    // In manual mode, ask user
-    if (executionMode === 'manual') {
-      const answer = await askQuestion(`Execute Task ${task.num}? [Y/n]: `);
-      if (answer.toLowerCase().trim() === 'n') {
-        console.log(`⏭️  Skipped Task ${task.num}.`);
-        continue;
-      }
-    }
-
-    const isWindows = process.platform === 'win32';
-    const shellScript = path.join(tasksDir, `task_${task.num}.sh`);
-    const cmdScript = path.join(tasksDir, `task_${task.num}.cmd`);
-    let runCmd = '';
-
-    if (isWindows && fs.existsSync(cmdScript)) {
-      runCmd = `"${cmdScript}"`;
-    } else {
-      runCmd = `bash "${shellScript}"`;
-    }
-
-    try {
-      console.log(`▶️  Executing: ${runCmd}`);
-      execSync(runCmd, { stdio: 'inherit', cwd });
-      console.log(`\n✅ Task ${task.num} execution completed successfully.`);
-    } catch (err) {
-      console.error(`\n❌ Error: Task ${task.num} execution script failed.`);
-      if (executionMode === 'auto') {
-        console.log('🛑 Aborting sprint execution in auto mode.');
-        process.exit(1);
-      }
-      console.log('Choices:');
-      console.log('  [r] Retry the current task');
-      console.log('  [s] Skip / Defer the task and continue');
-      console.log('  [a] Abort execution loop');
-      const action = await askQuestion('Select action [r/s/a] (default: r): ');
-      const cleanAction = action.toLowerCase().trim();
-      if (cleanAction === 's') {
-        console.log(`⏭️  Skipping Task ${task.num} and continuing.`);
-        continue;
-      } else if (cleanAction === 'a') {
-        console.log('🛑 Aborted.');
-        process.exit(1);
-      } else {
-        // Retry
-        console.log(`🔄 Retrying Task ${task.num}...`);
-        i--; // decrement to run this task again in next iteration
-        continue;
-      }
-    }
+  try {
+    execSync(`bash "${masterScript}"`, { stdio: 'inherit', cwd });
+    console.log('─'.repeat(64));
+    console.log(`\n🏁 Sprint ${sprintNum} execution complete!`);
+  } catch (err) {
+    console.log('─'.repeat(64));
+    console.error(`\n❌ Sprint ${sprintNum} execution failed.`);
+    console.error(`   Check the output above for details.`);
+    process.exit(1);
   }
-
-  console.log('\n🏁 Sprint Execution finished!');
-  console.log(`   All incomplete tasks in Sprint ${sprintNum} have been processed.`);
+  console.log('');
 }
 
 // ─── Framework Initialization (existing behavior + configuration scanning) ───
@@ -1011,24 +940,11 @@ async function runInit() {
       }
     }
 
-    let executionMode = 'auto';
-    if (isInteractive) {
-      console.log('\nChoose execution mode:');
-      console.log('  [1] Auto task execution (default)');
-      console.log('  [2] Manual execution');
-      const answer = await askQuestion('Select execution mode [1-2] (default: 1): ');
-      if (answer.trim() === '2') {
-        executionMode = 'manual';
-      }
-      console.log(`\n❇️  Selected execution mode: ${executionMode}`);
-    }
-
     // Write/Update zeoel.config.json
     const configPath = path.join(cwd, 'zeoel.config.json');
     const configData = {
       primary_engine: primaryEngine,
       default_model: defaultModel || undefined,
-      execution_mode: executionMode,
       available_engines: {}
     };
 

@@ -19,12 +19,12 @@ The complete Zeoel framework is at [skills/zeoel/SKILL.md](skills/zeoel/SKILL.md
 
 ## The Pipeline
 
-| Phase | What to Read | Mandatory Deliverables |
-|-------|-------------|----------------------|
-| **1. Brainstorm** | [skills/zeoel-brainstorm/SKILL.md](skills/zeoel-brainstorm/SKILL.md) | `PROJECT_BRIEF.md` (user approved), `docs/brainstorm/summary.md` |
-| **2. Sprint Plan** | [skills/zeoel-sprint-planner/SKILL.md](skills/zeoel-sprint-planner/SKILL.md) | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md` |
-| **3. Execute** | [skills/zeoel-dispatch/SKILL.md](skills/zeoel-dispatch/SKILL.md) | Working code (Red-Green-Refactor TDD), `progress.md` updated |
-| **4. Verify & Snapshot** | Dispatch QA + Security + SEO agents | `docs/qa/`, `docs/security/`, `docs/sprint-N/done.md`, and `.worktrees/sprint-N/` snapshot |
+| Phase | What to Read | Mandatory Deliverables | CLI |
+|-------|-------------|----------------------|-----|
+| **1. Brainstorm** | [skills/zeoel-brainstorm/SKILL.md](skills/zeoel-brainstorm/SKILL.md) | `PROJECT_BRIEF.md` (user approved), `docs/brainstorm/summary.md` | `bash .zeoel/commands/start.sh` |
+| **2. Sprint Plan** | [skills/zeoel-sprint-planner/SKILL.md](skills/zeoel-sprint-planner/SKILL.md) | `docs/sprint-N/plan.md`, `docs/sprint-N/progress.md`, `run_all_tasks.sh` | `zeoel sprint design N` |
+| **3. Execute** | [skills/zeoel-dispatch/SKILL.md](skills/zeoel-dispatch/SKILL.md) | Working code (Red-Green-Refactor TDD), `progress.md` updated | `zeoel sprint execute N` |
+| **4. Verify & Snapshot** | Dispatch QA + Security + SEO agents | `docs/qa/`, `docs/security/`, `docs/sprint-N/done.md`, `.worktrees/sprint-N/` | — |
 
 **Phase Gates**: You CANNOT enter Phase N+1 without Phase N deliverables existing as files.
 

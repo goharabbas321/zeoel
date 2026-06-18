@@ -82,7 +82,13 @@ If a task involves multiple agents (e.g. a developer agent and a reviewer agent,
 
 ## Shell Script Generation
 
-For every task in the sprint plan, Gohar CEO must forcefully generate a shell script file under `docs/sprint-N/tasks/task_K.sh` (e.g. `docs/sprint-1/tasks/task_1.sh`). Additionally, Gohar CEO must forcefully generate a master sprint execution script named `run_all_tasks.sh` directly under `docs/sprint-N/run_all_tasks.sh` which executes all individual task scripts in the sprint sequentially without user prompts.
+For every task in the sprint plan, Gohar CEO must forcefully generate a shell script file under `docs/sprint-N/tasks/task_K.sh` (e.g. `docs/sprint-1/tasks/task_1.sh`). Additionally, Gohar CEO must forcefully generate a master sprint execution script named `run_all_tasks.sh` directly under `docs/sprint-N/run_all_tasks.sh` which executes all individual task scripts in the sprint sequentially.
+
+> **CLI Commands (after planning):**
+> - Validate planning: `zeoel sprint design N`
+> - Execute all tasks: `zeoel sprint execute N` (runs `run_all_tasks.sh`)
+> - Run single task: `bash docs/sprint-N/tasks/task_K.sh`
+
 
 ### Master Run-All Script Template (`docs/sprint-N/run_all_tasks.sh`):
 ```bash

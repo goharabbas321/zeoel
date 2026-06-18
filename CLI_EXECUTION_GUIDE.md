@@ -1,106 +1,95 @@
-# Zeoel CLI-Driven Agent Execution Guide
+# Zeoel CLI Guide
 
-This document explains how the Zeoel framework runs agents using your local developer CLI tools (**Claude Code, OpenCode, Codex, and Antigravity IDE**) instead of direct API calls.
-
----
-
-## How It Works Under the Hood
-
-The `zeoel agent run` command follows a decoupled architecture:
-
-```
-┌─────────────────┐       ┌─────────────────┐       ┌────────────────────────┐
-│  Agent Registry │ ────> │  Prompt Builder │ ────> │ Resolved Prompt String │
-│  (YAML + MD)    │       │                 │       │ (System+Skills+Memory) │
-└─────────────────┘       └─────────────────┘       └────────────────────────┘
-                                                                 │
-                                                                 ▼
-┌─────────────────┐       ┌─────────────────┐       ┌────────────────────────┐
-│ Captured Output │ <──── │   CLI Adapter   │ <──── │  Spawn Local CLI Tool  │
-│  (Session Log)  │       │  (Stdin Piped)  │       │ (claude/opencode/etc.) │
-└─────────────────┘       └─────────────────┘       └────────────────────────┘
-```
-
-1. **Prompt Compilation**: The orchestrator resolves the agent manifest (`agent.yml`), loads its system instructions (`SYSTEM.md`), aggregates all referenced skills (`SKILL.md` files), loads workspace memory files, and formats the user's task and acceptance criteria into a single Markdown prompt.
-2. **Engine Selection**: The orchestrator determines which local CLI tool to run based on the `--engine` flag, manifest preferences, or automatic path discovery.
-3. **Execution**: The orchestrator spawns the CLI binary as a subprocess and writes the compiled prompt directly into its standard input (`stdin`). This avoids terminal argument size limit errors and provides clean input formatting.
-4. **Output Capture**: The tool's stdout is captured, cleaned of CLI metadata/progress indicators, and logged to a session folder under `sessions/{timestamp}-{agent-id}/`.
+A quick reference for all `zeoel` commands.
 
 ---
 
-## Commands & Usage
+## Commands
 
-### 1. List Available Agents
-Scan all manifests inside `agents/` and list them:
+### Framework
+
 ```bash
-zeoel agent list
+zeoel                     # Initialize/update framework globally
+zeoel --version           # Print version
+zeoel --help              # Print help
 ```
 
-### 2. Inspect an Agent
-Print full manifest information, resolved permissions, memory scopes, and a preview of loaded skills and system prompts:
+### Agent Commands
+
 ```bash
-zeoel agent inspect premium-ui-designer
+zeoel agent list                              # List all registered agents
+zeoel agent inspect <id>                      # Show agent manifest + skills
+zeoel agent run <id> "<task>"                 # Dry-run (build & preview prompt)
+zeoel agent run <id> "<task>" --live          # Live execution via local CLI
+zeoel agent run <id> "<task>" --live \
+  --engine <claude|opencode|codex|agy> \
+  -m <model> \
+  --criteria "<acceptance criteria>" \
+  --output <path>
 ```
 
-### 3. Run an Agent (Dry-Run by Default)
-Build and format the prompt, print a preview of the prompt, and save it to the session log directory without calling any external CLI tool:
+### Sprint Commands
+
 ```bash
-zeoel agent run premium-ui-designer "Create a beautiful contact form component"
+zeoel sprint design [N]     # Validate Sprint N planning docs exist (Phase 2 check)
+zeoel sprint execute [N]    # Execute all Sprint N tasks (runs run_all_tasks.sh)
 ```
 
-### 4. Run an Agent Live
-Execute the agent against one of your local coding assistants:
-```bash
-zeoel agent run premium-ui-designer "Create a beautiful contact form component" --live
+**Sprint N is auto-detected** from `PROJECT_BRIEF.md` → `docs/sprint-N/` if not provided.
+
+---
+
+## Typical Workflow
+
+```
+Phase 1 — Brainstorm
+  bash .zeoel/commands/start.sh
+  # fill .zeoel/answers/answers.md
+  bash .zeoel/commands/submit_answers.sh
+
+Phase 2 — Sprint Planning (AI generates files)
+  # Ask AI: "Plan Sprint 1"
+  zeoel sprint design 1     # ← validate all planning docs exist
+
+Phase 3 — Execute
+  zeoel sprint execute 1    # ← runs docs/sprint-1/run_all_tasks.sh
+
+  # Or run individual tasks:
+  bash docs/sprint-1/tasks/task_1.sh
+  bash docs/sprint-1/tasks/task_2.sh
 ```
 
 ---
 
-## Supported Engine CLI Tools
+## How Agent Execution Works
 
-### Claude Code CLI (`claude`)
-- **CLI Command**: Runs `claude -p` (print mode) with optional `--model <override>`.
-- **Input/Output**: Pipes prompt to `stdin` and captures standard output.
-- **Example**:
-  ```bash
-  zeoel agent run premium-ui-designer "Audit this page" --live --engine claude
-  ```
+```
+Agent Registry (YAML + MD)
+        │
+        ▼
+  Prompt Builder  →  Compiled Prompt (System + Skills + Memory)
+                              │
+                              ▼
+                    Local CLI Tool (claude / opencode / codex / agy)
+                              │
+                              ▼
+                    Captured Output → Session Log
+```
 
-### OpenCode CLI (`opencode`)
-- **CLI Command**: Runs `opencode run --dangerously-skip-permissions` with optional `-m <model>`.
-- **Input/Output**: Pipes prompt to `stdin` and filters out terminal progress labels (like `> build ·`).
-- **Example**:
-  ```bash
-  zeoel agent run premium-ui-designer "Build hero section" --live --engine opencode
-  ```
-
-### OpenAI Codex CLI (`codex`)
-- **CLI Command**: Runs `codex --dangerously-bypass-approvals-and-sandbox exec - -o <temp_file>` with optional `-m <model>`.
-- **Input/Output**: Pipes prompt to stdin (`-`) and extracts clean output from the temporary output file.
-- **Example**:
-  ```bash
-  zeoel agent run premium-ui-designer "Build auth middleware" --live --engine codex
-  ```
-
-### Antigravity CLI (`antigravity-ide`)
-- **CLI Command**: Runs `antigravity-ide chat -`.
-- **Input/Output**: Pipes prompt to stdin which focuses the chat GUI panel inside your open Antigravity IDE window, letting you inspect and interact with the agent visually.
-- **Example**:
-  ```bash
-  zeoel agent run premium-ui-designer "Plan landing page layout" --live --engine antigravity
-  ```
+1. **Prompt Compilation**: Resolves `agent.yml`, `SYSTEM.md`, skill `SKILL.md` files, and memory into a single Markdown prompt.
+2. **Engine Selection**: Determined by `--engine` flag → `zeoel.config.json` → agent manifest preferences.
+3. **Execution**: Spawns the CLI binary and pipes the prompt to `stdin`.
+4. **Output Capture**: Stdout is captured and logged to `sessions/{timestamp}-{agent-id}/`.
 
 ---
 
-## Engine Selection Logic
+## Supported Engines
 
-When you run `zeoel agent run --live`, the orchestrator uses the following priority order to select which CLI tool to execute:
-
-1. **Explicit Override**: If you pass `--engine <cli>` (e.g. `--engine claude` or `--engine opencode`), that adapter is used.
-2. **Model Association**: If you specify a model name (e.g. `--engine claude-3-5-sonnet` or `--engine google/gemini-3.5-flash`), the system maps the model prefix to its corresponding tool (Claude Code for `claude-*`, Codex for `gpt-*`/`o3*`, OpenCode for `gemini-*`/`deepseek-*`) and configures that model on the CLI.
-3. **Auto-Detection**: If no engine is specified, the framework scans your environment path and home profile directories for installed tools in the following order:
-   - `opencode`
-   - `claude`
-   - `codex`
-   - `antigravity-ide`
-   The first available tool detected will be used.
+| Engine     | CLI Binary    | Notes                              |
+|------------|---------------|------------------------------------|
+| `claude`   | `claude`      | Claude Code CLI                    |
+| `opencode` | `opencode`    | OpenCode CLI                       |
+| `codex`    | `codex`       | OpenAI Codex CLI                   |
+| `agy`      | `agy`         | Antigravity CLI                    |
+| `qwen`     | `qwen`        | QwenCode CLI                       |
+| `mimo`     | `mimo`        | MimoCode CLI                       |
