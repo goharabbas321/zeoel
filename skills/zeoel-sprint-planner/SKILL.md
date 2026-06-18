@@ -91,31 +91,35 @@ For every task in the sprint plan, Gohar CEO must forcefully generate a shell sc
 
 
 ### Master Run-All Script Template (`docs/sprint-N/run_all_tasks.sh`):
+
+> ⚠️ **QUOTING RULE**: The `SCRIPT_DIR` line MUST use `$0` (not `${BASH_SOURCE[0]}`) and MUST NOT nest double-quoted `$(...)` substitutions inside another double-quoted `$(...)`. Violating this causes `unexpected EOF while looking for matching` syntax errors.
+
 ```bash
 #!/bin/bash
 # Zeoel Master Sprint Execution Script - Sprint N
 # Executes all tasks sequentially.
 
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 echo "🏁 Starting Master Execution for Sprint N..."
 echo ""
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # Find and sort all task scripts under tasks/
-tasks=($(find "$SCRIPT_DIR/tasks" -maxdepth 1 -name "task_*.sh" | sort -V))
+mapfile -t tasks < <(find "$SCRIPT_DIR/tasks" -maxdepth 1 -name 'task_*.sh' | sort -V)
 
-if [ ${#tasks[@]} -eq 0 ]; then
+if [ "${#tasks[@]}" -eq 0 ]; then
   echo "❌ No task scripts found in $SCRIPT_DIR/tasks!"
   exit 1
 fi
 
 for task_script in "${tasks[@]}"; do
-  task_name=$(basename "$task_script")
+  task_name="$(basename "$task_script")"
   echo "--------------------------------------------------------"
-  echo "📋 Running task: $task_name"
+  echo "📋 Running: $task_name"
   echo "--------------------------------------------------------"
-  
-  # Run the task script. If it fails, abort immediately to preserve harness integrity.
+
   bash "$task_script"
   if [ $? -ne 0 ]; then
     echo "❌ Error: $task_name failed! Aborting sprint execution."
