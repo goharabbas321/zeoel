@@ -77,7 +77,31 @@ function extractSkillId(skillPath: string): string {
   return path.basename(path.dirname(skillPath));
 }
 
-// ─── Memory File Loading ──────────────────────────────────────────────────────
+const BINARY_EXTENSIONS = new Set([
+  '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.pdf', '.zip', '.tar', '.gz', 
+  '.mp4', '.mov', '.avi', '.mp3', '.wav', '.woff', '.woff2', '.ttf', '.eot', 
+  '.exe', '.dll', '.so', '.dylib', '.map', '.db', '.sqlite', '.sqlite3', '.wasm',
+  '.xlsx', '.xls', '.docx', '.doc', '.pptx', '.ppt', '.ds_store'
+]);
+
+const EXCLUDED_DIR_SEGMENTS = [
+  '/node_modules/',
+  '/.next/',
+  '/.nuxt/',
+  '/dist/',
+  '/build/',
+  '/.git/'
+];
+
+const EXCLUDED_FILENAME_EXACT = new Set([
+  'package-lock.json',
+  'yarn.lock',
+  'pnpm-lock.yaml',
+  'skills-lock.json',
+  '.ds_store'
+]);
+
+const MAX_FILE_SIZE_BYTES = 1024 * 1024; // 1MB
 
 /**
  * Load all readable memory files declared in the agent manifest.
@@ -94,7 +118,25 @@ export async function loadMemoryFiles(
     let matchedPaths: string[];
 
     try {
-      matchedPaths = await glob(pattern, { cwd, absolute: true, nodir: true, dot: true });
+      matchedPaths = await glob(pattern, {
+        cwd,
+        absolute: true,
+        nodir: true,
+        dot: true,
+        ignore: [
+          "**/node_modules/**",
+          "**/.next/**",
+          "**/.nuxt/**",
+          "**/dist/**",
+          "**/build/**",
+          "**/.git/**",
+          "**/package-lock.json",
+          "**/yarn.lock",
+          "**/pnpm-lock.yaml",
+          "**/skills-lock.json",
+          "**/.DS_Store"
+        ]
+      });
     } catch {
       // Invalid glob pattern — skip with a warning
       console.warn(
@@ -106,7 +148,27 @@ export async function loadMemoryFiles(
     for (const filePath of matchedPaths) {
       if (!fs.existsSync(filePath)) continue;
 
+      // 1. Check directory exclusions (defense in depth)
+      const normalizedPath = filePath.replace(/\\/g, "/");
+      const isExcludedDir = EXCLUDED_DIR_SEGMENTS.some(segment => normalizedPath.includes(segment));
+      if (isExcludedDir) continue;
+
+      // 2. Check filename exclusions
+      const basename = path.basename(filePath).toLowerCase();
+      if (EXCLUDED_FILENAME_EXACT.has(basename)) continue;
+
+      // 3. Check binary file extensions
+      const ext = path.extname(filePath).toLowerCase();
+      if (BINARY_EXTENSIONS.has(ext)) continue;
+
       try {
+        // 4. Check file size to avoid heap memory issues
+        const stats = fs.statSync(filePath);
+        if (stats.size > MAX_FILE_SIZE_BYTES) {
+          console.warn(`  ⚠️  Skipping large memory file (${(stats.size / 1024).toFixed(0)} KB): "${filePath}"`);
+          continue;
+        }
+
         const content = fs.readFileSync(filePath, "utf-8");
         results.push({ path: filePath, content });
       } catch {
